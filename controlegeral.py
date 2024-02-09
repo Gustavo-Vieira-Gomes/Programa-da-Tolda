@@ -74,11 +74,11 @@ class SuporteScreen(Screen):
 class ControleGeralApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.pben = pd.read_excel(FILE_NAME, sheet_name=SHEET_PBEN)
+        self.pben = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_PBEN)
 
         self.aspirantes = cria_aspirantes(self.pben)
 
-        self.licencas = pd.read_excel(FILE_NAME, sheet_name=SHEET_LICENCAS)
+        self.licencas = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_LICENCAS)
         self.licencas['Última Alteração'] = self.licencas['Última Alteração'].astype('str')
         self.licencas['Número Interno']   = self.licencas['Número Interno'].astype('str')
 
@@ -92,13 +92,13 @@ class ControleGeralApp(App):
         self.organiza_terceiro_licenca()
         self.organiza_quarto_licenca()
 
-        self.chaves = pd.read_excel(FILE_NAME, sheet_name=SHEET_CHAVES)
+        self.chaves = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_CHAVES)
         self.chaves['Última Alteração'] = self.chaves['Última Alteração'].astype('str')
         self.chaves['Anterior'] = self.chaves['Anterior'].astype('str')
         self.chaves['Atual'] = self.chaves['Atual'].astype('str')
         self.organiza_claviculario()
 
-        self.partealta = pd.read_excel(FILE_NAME, sheet_name=SHEET_PARTE_ALTA)
+        self.partealta = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_PARTE_ALTA)
         self.partealta['Última Alteração'] = self.partealta['Última Alteração'].astype('str')
         self.partealta['Número Interno'] = self.partealta['Número Interno'].astype('str')
 
@@ -108,7 +108,7 @@ class ControleGeralApp(App):
         self.organiza_terceiro_partealta()
         self.organiza_quarto_partealta()
 
-        self.chefedia = pd.read_excel(FILE_NAME, sheet_name=SHEET_CHEFE_DIA)
+        self.chefedia = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_CHEFE_DIA)
 
     """
         Ao iniciar o programa, isso deixará os campos de informação limpos
@@ -1013,6 +1013,18 @@ class ScrollerPage4(RecycleView, ControleGeralApp):
         for index, row in df.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
         self.data = data.copy()
+
+
+def resource_path(relative_path):
+    """ Get the absolute path to the resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath("")
+
+    return os.path.join(base_path, relative_path)
+
 
 
 if __name__ == '__main__':
