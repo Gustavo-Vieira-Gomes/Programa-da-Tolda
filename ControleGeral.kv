@@ -1,0 +1,2521 @@
+MenuScreen
+
+#MENU
+
+<MenuScreen>:
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, .1
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+            Label:
+                text: 'CONTROLE GERAL'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, 1
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        BoxLayout:
+            size_hint: 1, .85
+            Label:
+                size_hint: .1, 1
+            BoxLayout:
+                size_hint: .8, 1
+                spacing: "20dp"
+                orientation: 'vertical'
+                Button:
+                    text: 'PBEN'
+                    on_press: root.manager.current = 'pben'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    bold: True
+                Button:
+                    text: 'Licença'
+                    on_press: root.manager.current = 'licenca'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    size_hint: .6,.1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    bold: True
+                Button
+                    text: 'Claviculário'
+                    on_press: root.manager.current = 'chaves'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    bold: True
+                Button
+                    text: 'Acesso à Parte Baixa'
+                    on_press: root.manager.current = 'partealta'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    bold: True
+                Button
+                    text: 'Registro Chefe de Dia'
+                    on_press: root.manager.current = 'chefedia'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    bold: True
+                Button:
+                    text: 'SAIR'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    on_press: app.stop() 
+                    bold: True
+            Label:
+                size_hint: .1, 1
+
+        AnchorLayout:
+            size_hint: .07, 0.05
+            anchor_x: 'left'
+            achor_y: 'bottom'
+            Button:
+                text: 'Suporte'
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'suporte'
+                background_color: 0.7, 0.56, 0.4, 1
+                text_color: 0.77,0.77,0.77,1
+                bold: True
+
+#PBEN
+
+<PbenScreen>:
+    chave_pesquisa: chave_pesquisa
+
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        orientation: "vertical"
+
+        #Topo
+        BoxLayout:
+            size_hint: 1, .1
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+            Label:
+                text: 'PBEN'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, 1
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        #Corpo
+        BoxLayout:
+            size_hint: 1, .85
+            Label:
+                size_hint: .1, 1
+
+            #Interface
+            BoxLayout:
+                size_hint: .8, 1
+                orientation: "vertical"
+
+                #Consulta
+                BoxLayout:
+                    size_hint: 1, .15
+                    spacing: "20dp"
+
+                    Label:
+                        size_hint: 1,.2
+                    Label:
+                        text: 'Número Interno/Nome de Guerra:'
+                        size_hint: 1, 1
+                        text_size: self.size
+                        halign: 'right'
+                        valign: 'middle'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+                    TextInput:
+                        id: chave_pesquisa
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        size_hint: 1, .4
+                        multiline: False
+                        text_validate_unfocus: False
+                        on_text_validate:
+                            app.consulta_pben(self.text)
+                            self.text = ''
+                    Button:
+                        text: 'Consultar'
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        size_hint: 1, .4
+                        on_press:
+                            app.consulta_pben(chave_pesquisa.text)
+                            chave_pesquisa.text = ''
+                            chave_pesquisa.focus: True
+                        background_color: 0.7, 0.56, 0.4, 1
+                        text_color: 0.77,0.77,0.77,1
+                        bold: True
+                    Label:
+                        size_hint: 1,.3
+
+                DadosPrincipais:
+                    size_hint: 1, .15
+
+                OutrosDados:
+                    text: 'outros dados'
+                    size_hint: 1, .45
+
+                Contatos:
+                    size_hint: 1, .25
+
+            Label:
+                size_hint: .1, 1
+
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Menu'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+
+<DadosPrincipais@BoxLayout>:
+    Label:
+        text: 'Número Atual:'
+        size_hint: .6, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.numero_atual
+        size_hint: .2, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Nome de Guerra:'
+        size_hint: .6, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.nome_guerra
+        size_hint: 1, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+<OutrosDados@BoxLayout>:
+    NumerosAnteriores:
+    Organizacao:
+    Relacional:
+
+<Contatos@BoxLayout>:
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint: 1, .2
+            Label:
+                text: 'Nome Completo:'
+                size_hint: .4, 1
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.nome_completo
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+        GridLayout:
+            size_hint: 1, .8
+            cols: 2
+            Label:
+                text: 'Data de Nascimento:'
+                size_hint: .4, 1
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.nascimento
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Telefone:'
+                size_hint: .4, 1
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.telefone
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Celular:'
+                size_hint: .4, 1
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.celular
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'E-mail:'
+                size_hint: .4, 1
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.email
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+
+<NumerosAnteriores@BoxLayout>
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            size_hint: 1,.2
+            text: 'Números Anteriores:'
+            text_size: self.size
+            halign: 'left'
+            valign: 'middle'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            Label:
+                text: '2023:'
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.numero_interno_2023
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: '2022:'
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.numero_interno_2022
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: '2021:'
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.numero_interno_2021
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: '2020:'
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.numero_interno_2020
+                text_size: self.size
+                halign: 'left'
+                valign: 'middle'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+
+<Organizacao@GridLayout>
+    cols: 2
+    Label:
+        text: 'Companhia:'
+        size_hint: .4, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.companhia
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Pelotão:'
+        size_hint: .4, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.pelotao
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Camarote:'
+        size_hint: .4, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.camarote
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Quarto:'
+        size_hint: .4, 1
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.quarto
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+<Relacional@GridLayout>
+    cols: 2
+    Label:
+        text: 'N.I.P:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        size_hint: .4, 1
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.nip
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Tipo Sanguíneo:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        size_hint: .4, 1
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.sangue
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+#LICENCAS
+
+<LicencaScreen>:
+
+    chave_pesquisa: chave_pesquisa
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        Topo_Licenca:
+            size_hint: 1, .1
+
+        #Corpo Licenca
+        BoxLayout:
+            size_hint: 1, .85
+            Label:
+                size_hint: .1, 1
+
+            #Interface licenca
+            BoxLayout:
+                size_hint: .8, 1
+                orientation: "vertical"
+
+                #Atualiza licenca
+                BoxLayout:
+                    size_hint: 1, .1
+                    Label:
+                        size_hint: .125, 1
+                    Label:
+                        size_hint: .1, 1
+                        text: 'Novo status:'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+                    GridLayout:
+                        size_hint: .65, 1
+                        spacing: "5dp"
+                        rows: 2
+                        ToggleButton:
+                            group: 'licenca'
+                            id: reg_btn
+                            text: 'Regresso'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            id: lic_btn
+                            text: 'Licença'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            id: st_btn
+                            text: 'ST/GT'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            text: 'Baixado'
+                            id: baixado_btn
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            text: 'Disp. Domiciliar'
+                            id: dispdom_btn
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            text: 'LTS'
+                            id: lts_btn
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            text: 'HNMD'
+                            id: hnmd_btn
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                        ToggleButton:
+                            group: 'licenca'
+                            text: 'C/ Restrição'
+                            id: restr_btn
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.BOTAO_PRESSIONADO = self.text
+                                else: app.BOTAO_PRESSIONADO = ''
+                    Label:
+                        size_hint: .125, 1
+
+                #Consulta licenca
+                BoxLayout:
+                    size_hint: 1, .1
+                    spacing: "20dp"
+
+                    Label:
+                        size_hint: 1,.2
+
+                    Label:
+                        text: 'Número Interno/Nome de Guerra:'
+                        size_hint: 1, 1
+                        text_size: self.size
+                        halign: 'right'
+                        valign: 'middle'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+
+                    TextInput:
+                        id: chave_pesquisa
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        size_hint: 1, .6
+                        multiline: False
+                        text_validate_unfocus: False
+                        on_text_validate:
+                            app.consultar_licenca(self.text)
+                            app.atualiza_licenca(app.BOTAO_PRESSIONADO)
+                            chave_pesquisa.text = ''
+
+                    Button:
+                        text: 'Selecionar'
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        size_hint: 1, .6
+                        on_press:
+                            app.consultar_licenca(chave_pesquisa.text)
+                            app.atualiza_licenca(app.BOTAO_PRESSIONADO)
+                            chave_pesquisa.text = ''
+                        background_color: 0.7, 0.56, 0.4, 1
+                        text_color: 0.77,0.77,0.77,1
+                        bold: True
+                    Label:
+                        size_hint: 1,.3
+
+                #Selecionado Licenca
+                BoxLayout:
+                    size_hint: 1, .05
+                    spacing: "20dp"
+
+                    Label:
+                        size_hint: 1,.2
+    
+                    Label:
+                        text: 'Aspirante Selecionado:'
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True 
+                    Label:
+                        text: app.numero_atual + ' | ' + app.nome_guerra
+                        text_size: self.size
+                        halign: 'left'
+                        valign: 'middle'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+                    Label:
+                        size_hint: 1,.3
+                
+                Informacoes_Licenca:
+                    size_hint: 1, .1
+                Dados_Gerais_Licenca:
+                    size_hint: 1, .65
+
+            Label:
+                size_hint: .1, 1
+
+        Rodape_Licenca:
+            size_hint: 1, .05
+
+
+    GridLayout:
+        rows: 1
+        pos_hint: {'right': 1 , 'top': .05}
+        size_hint: .1, .05
+
+        Button:
+            text: 'Registro Licenças'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'registrolicencas'
+                print ('Registro de Licenças')
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Menu'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+                print ('Registro de Licenças')
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+<Topo_Licenca@BoxLayout>:
+    Image:
+        source: 'LogoM.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+    Label:
+        text: 'LICENÇAS'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        font_size: "28sp"
+        size_hint: .8, 1
+
+    Image:
+        source: 'LogoEN.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+<Rodape_Licenca@BoxLayout>:
+    BoxLayout:
+        size_hint: .1, 1
+        Label:
+            size_hint: .1, 1
+        Label:
+            size_hint: .2, 1
+    Label:
+        size_hint: .5, 1
+    Label:
+        size_hint: .2, 1
+        text: app.licenca_salvou
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+    Button:
+        size_hint: .15, 1
+        text: 'Salvar Alterações'
+        on_press: app.popup_salvando_licenca.open()
+        on_release: app.salvar_alteracoes()
+        background_color: 0.7, 0.56, 0.4, 1
+        text_color: 0.77,0.77,0.77,1
+        bold: True
+
+    Label:
+        text: ''
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        size_hint: .2, 1
+
+
+<Informacoes_Licenca@GridLayout>:
+    rows: 1
+    Label:
+        text: 'Situação Atual:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.situacao_atual_licenca
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Última Alteração:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.ultima_alteracao_licenca
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+<Dados_Gerais_Licenca@BoxLayout>:
+    orientation: "vertical"
+    Dados_Turma_Licenca:
+        size_hint: 1, 0.7
+    Dados_Todas_Turmas_Licenca:
+        size_hint: 1, 0.3
+    
+<Dados_Turma_Licenca@BoxLayout>:
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '1° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9 
+            Label:
+                text: 'A bordo: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.abordo_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Baixado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.baixado_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'C/ Restrição: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.crestricao_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Disp. Domiciliar: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.dispdomiciliar_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'HNMD: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.hnmd_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'LTS: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.lts_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Licenciados: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.licenciados_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'ST/GT: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.stgt_licenca1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '2° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9
+            Label:
+                text: 'A bordo: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.abordo_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Baixado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.baixado_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'C/ Restrição: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.crestricao_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Disp. Domiciliar: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.dispdomiciliar_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'HNMD: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.hnmd_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'LTS: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.lts_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Licenciados: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.licenciados_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'ST/GT: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.stgt_licenca2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '3° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9 
+            Label:
+                text: 'A bordo: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.abordo_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Baixado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.baixado_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'C/ Restrição: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.crestricao_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Disp. Domiciliar: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.dispdomiciliar_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'HNMD: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.hnmd_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'LTS: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.lts_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Licenciados: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.licenciados_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'ST/GT: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.stgt_licenca3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '4° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9 
+            Label:
+                text: 'A bordo: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.abordo_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Baixado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.baixado_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'C/ Restrição: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.crestricao_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Disp. Domiciliar: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.dispdomiciliar_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'HNMD: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.hnmd_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'LTS: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.lts_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Licenciados: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.licenciados_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'ST/GT: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.stgt_licenca4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+
+<Dados_Todas_Turmas_Licenca@BoxLayout>:
+    orientation: "vertical"
+    Label:
+        text: 'Controle Geral:'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    GridLayout:
+        rows: 2
+        Label:
+            text: 'A bordo: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.abordo_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Baixado: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.baixado_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'C/ Restrição: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.crestricao_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Disp. Domiciliar: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.dispdomiciliar_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'HNMD: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.hnmd_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'LTS: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.lts_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Licenciados: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.licenciados_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'ST/GT: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.stgt_licenca
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+
+
+#ScrollerPage1
+<ScrollerPage1>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#ScrollerPage2
+<ScrollerPage2>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#ScrollerPage3
+<ScrollerPage3>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#ScrollerPage4
+<ScrollerPage4>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#RegistroDeLicenças
+<RegistroLicencasScreen>
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, .05
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 1.5
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+
+            Label:
+                text: 'REGISTRO DE LICENÇAS'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, .75
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 1.5
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        #Corpo Registro Licenca
+        GridLayout:
+            rows: 4
+            size_hint: 1 , .3
+            Label:
+                size_hint: .1, 0.3
+
+            #Interface Registro Licenca
+            GridLayout:
+                size_hint: .3, .2
+                cols: 4
+                Label:
+                    text: '1º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+                Label:
+                    text: '2º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+                Label:
+                    text: '3º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+                Label:
+                    text: '4º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+            #Scrol Registro Licenca
+            GridLayout:
+                size_hint: 1, 1
+                cols: 4
+
+                ScrollerPage1:
+                ScrollerPage2:
+                ScrollerPage3:
+                ScrollerPage4:
+
+            Label:
+                size_hint_y:0.4
+    Label:
+        size_hint_y:0.4
+
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Licenças'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'licenca'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+
+
+#Claviculario
+
+<ChavesScreen>:
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        orientation: "vertical"
+        Topo_Chaves:
+            size_hint: 1, .1
+        Corpo_Chaves:
+            size_hint: 1, .85
+        Rodape_Chaves:
+            size_hint: 1, .05
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Menu'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+<Topo_Chaves@BoxLayout>:
+    Image:
+        source: 'LogoM.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+    Label:
+        text: 'CLAVICULÁRIO'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        font_size: "28sp"
+        size_hint: .8, 1
+
+    Image:
+        source: 'LogoEN.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+<Corpo_Chaves@BoxLayout>:
+    Label:
+        size_hint: .1, 1
+    Interface_Chaves:
+        size_hint: .8, 1
+    Label:
+        size_hint: .1, 1
+
+<Rodape_Chaves@BoxLayout>:
+    BoxLayout:
+        size_hint: .1, 1
+        Label:
+            size_hint: .1, 1
+        Label:
+            size_hint: .2, 1
+    Label:
+        size_hint: .5, 1
+    Label:
+        size_hint: .2, 1
+        text: app.chaves_salvou
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+    Button:
+        size_hint: .15, 1
+        text: 'Salvar Alterações'
+        on_press: app.popup_salvando_licenca.open()
+        on_release: app.salvar_alteracoes()    
+        background_color: 0.7, 0.56, 0.4, 1
+        text_color: 0.77,0.77,0.77,1
+        bold: True
+    Label:
+        text: ''
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        size_hint: .2, 1
+
+<Interface_Chaves@FloatLayout>:
+
+    Selecionador_Chave:
+        pos_hint: {"right": 1 , "top" : 1}
+        size_hint: 1, .45
+    Informacao_Chave:
+        pos_hint: {"right" : 1 , "top" : .60 }
+        size_hint: 1, .45
+    Situacao_Chave:
+        pos_hint: {"right" : 1 , "top" : .15 }
+        size_hint: 1, .1
+
+
+<Selecionador_Chave@BoxLayout>
+    chave_pesquisa: chave_pesquisa
+    asp_retirando: asp_retirando
+
+#Botões_Claviculario
+    orientation: "vertical"
+    Label:
+        size_hint: .125, 1
+
+    BoxLayout:
+        orientation: "horizontal"
+        size_hint: .90, .5
+        spacing: "20dp"
+
+        Label:
+            #size_hint: .1, .60
+            text: 'Novo status:'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+
+        Button:
+            group: 'claviculario'
+            text: 'Pesquisar'
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+            on_press:
+                app.input_texto_chave(chave_pesquisa.text)
+                chave_pesquisa.text = ''
+
+        Button:
+            group: 'claviculario'
+            text: 'Retirada'
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+            on_press:
+                app.dar_chave(chave_pesquisa.text, asp_retirando.text)
+                chave_pesquisa.text = ''
+                asp_retirando.text = ''
+
+        Button:
+            group: 'claviculario'
+            text: 'Devolução'
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+            on_press:
+                app.retorna_chave(chave_pesquisa)
+                chave_pesquisa.text = ''
+
+
+
+    #InserirNumeroChave
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            size_hint: .1, 1
+        BoxLayout:
+            size_hint: .8, 1
+            orientation: 'vertical'
+            BoxLayout:
+                spacing: "20dp"
+                Label:
+                    text: 'Chave:                                    '
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+                TextInput:
+                    id: chave_pesquisa
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    multiline: False
+                    size_hint: .9, .5
+                    on_text_validate:
+                        app.input_texto_chave(self.text)
+                        self.text = ''
+
+        Label:
+            size_hint: .1, 1
+
+    #RetiraChave
+    BoxLayout:
+        orientation: 'horizontal'
+
+        Label:
+            size_hint: .1, 1
+        BoxLayout:
+            size_hint: .9, 1
+            orientation: 'vertical'
+            BoxLayout:
+                spacing: "20dp"
+                Label:
+                    text: 'Nova situação da chave: '
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+                TextInput:
+                    id: asp_retirando
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    multiline: False
+                    size_hint: .9, .5
+                    on_text_validate:
+                        app.dar_chave(chave_pesquisa.text, asp_retirando.text)
+        Label:
+            size_hint: .1, 1
+
+<Informacao_Chave@GridLayout>:
+    rows: 2
+    Label:
+        text: 'Chave selecionada: '
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.chave_nome
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Atualmente com: '
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.chave_atualmente_com
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Anteriormente com: '
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.chave_anteriormente_com
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Última alteração: '
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.chave_ultima_alteracao
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+
+<Situacao_Chave@BoxLayout>:
+    Label:
+        text: 'Chaves no claviculário: '
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.chaves_claviculario
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Chaves fora do claviculário: '
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.chaves_fora
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+#ParteAlta
+
+<ParteAltaScreen>:
+
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        Topo_ParteAlta:
+            size_hint: 1, .1
+
+        #Corpo Parte Alta
+        BoxLayout:
+            size_hint: 1, .85
+            Label:
+                size_hint: .1, 1
+
+
+            #Interface Parte Alta
+            BoxLayout:
+                size_hint: .8, 1
+                orientation: "vertical"
+
+            #Atualiza Parte Alta
+                BoxLayout:
+                    size_hint: 1, .1
+                    Label:
+                        size_hint: .125, 1
+                    Label:
+                        size_hint: .1, 1
+                        text: 'Novo status:'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+                    GridLayout:
+                        size_hint: .65, 1
+                        spacing: "5dp"
+                        rows: 2
+                        ToggleButton:
+                            group: 'parte alta'
+                            text: 'Parte Alta'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.botao_parte_alta = self.text
+                                else: app.botao_parte_alta = ''
+                        ToggleButton:
+                            group: 'parte alta'
+                            text: 'TFM'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.botao_parte_alta = self.text
+                                else: app.botao_parte_alta = ''
+                        ToggleButton:
+                            group: 'parte alta'
+                            text: 'Sala de Estado'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.botao_parte_alta = self.text
+                                else: app.botao_parte_alta = ''
+                        ToggleButton:
+                            group: 'parte alta'
+                            text: 'Enfermaria'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.botao_parte_alta = self.text
+                                else: app.botao_parte_alta = ''
+                        ToggleButton:
+                            group: 'parte alta'
+                            text: 'Banco'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.botao_parte_alta = self.text
+                                else: app.botao_parte_alta = ''
+                        ToggleButton:
+                            group: 'parte alta'
+                            text: 'Biblioteca'
+                            pos_hint: {'center_x': .5, 'center_y': .5}
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_state:
+                                if self.state == 'down': app.botao_parte_alta = self.text
+                                else: app.botao_parte_alta = ''
+                    Label:
+                        size_hint: .125, 1
+
+                #Consulta Parte Alta
+                BoxLayout:
+                    size_hint: 1, .1
+                    spacing: "20dp"
+
+                    Label:
+                        size_hint: 1,.2
+                    Label:
+                        text: 'Número Interno/Nome de Guerra:'
+                        size_hint: 1, 1
+                        text_size: self.size
+                        halign: 'right'
+                        valign: 'middle'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+                    TextInput:
+                        id: chave_pesquisa
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        size_hint: 1, .6
+                        multiline: False
+                        text_validate_unfocus: False
+                        on_text_validate:
+                            app.consultar_partealta(chave_pesquisa.text)
+                            app.atualiza_partealta(app.botao_parte_alta)
+                            chave_pesquisa.text = ''
+
+                    Button:
+                        text: 'Selecionar'
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        size_hint: 1, .6
+                        on_press:
+                            app.consultar_partealta(chave_pesquisa.text)
+                            app.atualiza_partealta(app.botao_parte_alta)
+                            chave_pesquisa.text = ''
+                        background_color: 0.7, 0.56, 0.4, 1
+                        text_color: 0.77,0.77,0.77,1
+                        bold: True
+
+                    Label:
+                        size_hint: 1,.3
+
+                Selecionado_ParteAlta:
+                    size_hint: 1, .05
+
+                Informacoes_ParteAlta:
+                    size_hint: 1, .1
+                Dados_Gerais_ParteAlta:
+                    size_hint: 1, .65
+
+            Label:
+                size_hint: .1, 1
+
+        Rodape_ParteAlta:
+            size_hint: 1, .05
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Menu'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+<Topo_ParteAlta@BoxLayout>:
+    Image:
+        source: 'LogoM.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+    Label:
+        text: 'ACESSO À PARTE BAIXA'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        font_size: "28sp"
+        size_hint: .8, 1
+
+    Image:
+        source: 'LogoEN.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+
+<Rodape_ParteAlta@BoxLayout>:
+    BoxLayout:
+        size_hint: .1, 1
+        Label:
+            size_hint: .1, 1
+        Label:
+            size_hint: .2, 1
+    Label:
+        size_hint: .5, 1
+    Label:
+        size_hint: .2, 1
+        text: app.partealta_salvou
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+    Button:
+        size_hint: .15, 1
+        text: 'Salvar Alterações'
+        on_press: app.popup_salvando_licenca.open()
+        on_release: app.salvar_alteracoes()    
+        background_color: 0.7, 0.56, 0.4, 1
+        text_color: 0.77,0.77,0.77,1
+        bold: True
+    Label:
+        text: ''
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        size_hint: .2, 1
+
+<Selecionado_ParteAlta@BoxLayout>:
+    spacing: "20dp"
+
+    Label:
+        size_hint: 1,.2
+    
+    Label:
+        text: 'Aspirante Selecionado:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True 
+    Label:
+        text: app.numero_atual + ' | ' + app.nome_guerra
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        size_hint: 1,.3
+
+<Informacoes_ParteAlta@GridLayout>:
+    rows: 1
+    Label:
+        text: 'Situação Atual:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.situacao_atual_partealta
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: 'Última Alteração:'
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    Label:
+        text: app.ultima_alteracao_partealta
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+
+<Dados_Gerais_ParteAlta@BoxLayout>:
+    orientation: "vertical"
+    Dados_Turma_ParteAlta:
+        size_hint: 1, 0.7
+    Dados_Todas_Turmas_ParteAlta:
+        size_hint: 1, 0.3
+    
+<Dados_Turma_ParteAlta@BoxLayout>:
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '1° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9 
+            Label:
+                text: 'Parte Alta: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.partealta_partelta1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'TFM: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.tfm_partealta1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Sala de Estado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.saladeestado_partealta1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Enfermaria: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.enfermaria_partealta1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Banco: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.banco_partealta1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Biblioteca: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.biblioteca_partealta1
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '2° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9
+            Label:
+                text: 'Parte Alta: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.partealta_partelta2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'TFM: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.tfm_partealta2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Sala de Estado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.saladeestado_partealta2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Enfermaria: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.enfermaria_partealta2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Banco: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.banco_partealta2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Biblioteca: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.biblioteca_partealta2
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '3° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9 
+            Label:
+                text: 'Parte Alta: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.partealta_partelta3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'TFM: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.tfm_partealta3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Sala de Estado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.saladeestado_partealta3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Enfermaria: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.enfermaria_partealta3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Banco: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.banco_partealta3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Biblioteca: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.biblioteca_partealta3
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+    
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: .25, 1
+        Label:
+            size_hint: 1, .1
+            text: '4° Ano'
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        GridLayout:
+            cols: 2
+            size_hint: 1, .9 
+            Label:
+                text: 'Parte Alta: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.partealta_partelta4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'TFM: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.tfm_partealta4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Sala de Estado: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.saladeestado_partealta4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Enfermaria: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.enfermaria_partealta4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Banco: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.banco_partealta4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: 'Biblioteca: '
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+            Label:
+                text: app.biblioteca_partealta4
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+
+<Dados_Todas_Turmas_ParteAlta@BoxLayout>:
+    orientation: "vertical"
+    Label:
+        text: 'Controle Geral:'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+    GridLayout:
+        rows: 2
+        Label:
+            text: 'Parte Alta: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.partealta_partelta
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'TFM: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.tfm_partealta
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Sala de Estado: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.saladeestado_partealta
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Enfermaria: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.enfermaria_partealta
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Banco: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.banco_partealta
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: 'Biblioteca: '
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+        Label:
+            text: app.biblioteca_partealta
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+    
+#Chefe dia
+<ChefeDiaScreen>
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        TopoChefeDia:
+            size_hint: 1, .1
+
+        BoxLayout:
+            size_hint: 1, .85
+            BoxLayout:
+                orientation:'vertical'
+                BoxLayout:
+                    size_hint: 1,.8
+                    Label: 
+                        size_hint: .2,1
+                    GridLayout:
+                        spacing: "10dp"
+                        size_hint: .6,1
+                        cols: 2
+                        Label:
+                            text: 'N° AjOSCA:'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: n_ajosca
+                            size_hint: 1,.7
+                            on_text_validate: app.att_numero_ajosca_cd(self.text)
+                            multiline: False
+                        Label:
+                            text: 'Quarto de Serviço:'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+
+                        GridLayout:
+                            size_hint: 1,1
+                            cols:2
+                            TextInput:
+                                id: quarto_de_servico
+                                size_hint: .8,.7
+                                multiline: False
+                                on_text_validate: app.att_quarto_de_serviço_cd(self)
+                            Button:
+                                text: 'Verificar'
+                                on_press:
+                                    app.count_regs_lics(quarto_de_servico, licenciados, regressos)
+                                background_color: 0.7, 0.56, 0.4, 1
+                                text_color: 0.77,0.77,0.77,1
+                                bold: True
+                                size_hint: .2,.7
+
+                        Label:
+                            text: 'N° Chefe de Dia:'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: numero_chefe
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_numero_chefe_cd(self)
+                        Label:
+                            text: 'Qtd Cintos:'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: cintos
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_cintos_cd(self)
+                        Label:
+                            text: 'Situação Computador/Alarme'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: computador
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_computador_cd(self)
+                        Label:
+                            text: 'Situação-Mapa Mundi'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: mapa
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_mapamundi_cd(self)
+                        Label:
+                            text: 'Bandeira Asp Nascimento'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: bandeira
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_bandeira_cd(self)
+                        Label:
+                            text: 'Qtd. Regressos'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: regressos
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_regressos_cd(self)
+                        Label:
+                            text: 'Qtd. Licenciados'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.7
+                        TextInput:
+                            id: licenciados
+                            size_hint: 1,.7
+                            multiline: False
+                            on_text_validate: app.att_licenciados_cd(self)
+                    Label: 
+                        size_hint: .2,1
+                Label:
+                    size_hint: 1,.1
+                    text: app.chefedodia_registrando1
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+                Label:
+                    size_hint: 1,.1
+                    text: app.chefedodia_registrando2
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+                BoxLayout:
+                    size_hint: 1,.1
+                    spacing: "20dp"
+                    Label:
+                        size_hint: .2,1
+                    BoxLayout:
+                        size_hint: .6,1
+                        Button:
+                            text: 'Registrar este Chefe de Dia'
+                            background_color: 0.7, 0.56, 0.4, 1
+                            text_color: 0.77,0.77,0.77,1
+                            bold: True
+                            on_press: app.popup_salvando_licenca.open()
+                            on_release:
+                                app.att_numero_ajosca_cd(n_ajosca)
+                                app.att_quarto_de_serviço_cd(quarto_de_servico)
+                                app.att_numero_chefe_cd(numero_chefe)
+                                app.att_cintos_cd(cintos)
+                                app.att_regressos_cd(regressos)
+                                app.att_licenciados_cd(licenciados)
+                                app.att_computador_cd(computador)
+                                app.att_mapamundi_cd(mapa)
+                                app.att_bandeira_cd(bandeira)
+
+
+                                app.registra_chefe_dia()
+                    Label:
+                        size_hint: .2,1
+        RodapeChefeDia:
+            size_hint: 1, .05
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Menu'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True  
+
+<TopoChefeDia@BoxLayout>:
+    Image:
+        source: 'LogoM.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+    Label:
+        text: 'REGISTRO CHEFE DE DIA'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        font_size: "28sp"
+        size_hint: .8, 1
+
+    Image:
+        source: 'LogoEN.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+<RodapeChefeDia@BoxLayout>:
+    BoxLayout:
+        size_hint: .1, 1
+        Label:
+            size_hint: .1, 1
+        Label:
+            size_hint: .2, 1
+    Label:
+        size_hint: .5, 1
+    Label:
+        text: ''
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        size_hint: .2, 1
+
+
+
+#SUPORTE
+<SuporteScreen>
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        TopoSuporte:
+            size_hint: 1, .1
+
+        BoxLayout:
+            size_hint: 1, 1
+            BoxLayout:
+                orientation:'vertical'
+                BoxLayout:
+                    size_hint: 1,1
+
+                    GridLayout:
+                        spacing: "10dp"
+                        size_hint: 1,.8
+                        cols: 1
+
+                        Label:
+                            text: 'ASP HARTMANN'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+
+                        Label:
+                            text: 'ASP LUCAS MORAES'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+
+                        Label:
+                            text: 'ASP NUNES TRINDADE'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+
+                        Label:
+                            text: 'ASP WAGNER SOUZA'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+                        Label:
+                            size_hint: 1,.3
+        RodapeSuporte:
+            size_hint: 1, .05
+    AnchorLayout:
+        size_hint: .05, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Menu'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'menu'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+<TopoSuporte@BoxLayout>:
+    Image:
+        source: 'LogoM.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': 30, 'center_y': -0.2}
+
+    Label:
+        text: 'SUPORTE'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        font_size: "28sp"
+        size_hint: .8, 1
+
+    Image:
+        source: 'LogoEN.png'
+        size: self.texture_size
+        size_hint: .57, 2
+        pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+<RodapeSuporte@BoxLayout>:
+    BoxLayout:
+        size_hint: .1, 1
+        Label:
+            size_hint: .1, 1
+        Label:
+            size_hint: .2, 1
+    Label:
+        size_hint: .5, 1
+    Label:
+        text: 'CRIADO POR MICALOSKI'
+        color: 0.18, 0.28, 0.40, 1
+        bold: True
+        size_hint: .2, 1

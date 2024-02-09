@@ -1,0 +1,17 @@
+- O arquivo usado como banco de dados deve estar com o nome teste.ods, deve, também possuir 5 planilhas, que devem ser nomeadas exatamente assim: Licenças, PBEN, Chaves, ParteAlta, ChefeDia
+
+- Na planilha "Licenças", o cabeçalho deve ter as seguintes colunas: Número Interno, Situação, Ano, Última Alteração
+- Na planilha "PBEN", o cabeçalho deve ter as seguintes colunas: Número Interno Atual, Número Interno 2023, Número Interno 2022, Número Interno 2021, Número Interno 2020, Nome de Guerra, Nome Completo, Companhia, Pelotão, Alojamento/Camarote, N.I.P., Número da ID. Militar, Quarto/Habilitação, Telefone de Contato, Celular de Contato, Data de Nascimento, Tipo Sanguíneo +Fator RH, Equipe, E-mail, Religião, Cidade, Estado, Bairro, Endereço, CEP, Nome do Pai, Profissão do Pai, Caso o Pai Seja Militar- Força Armada/Força Auxiliar, Caso o Pai Seja Militar- Posto ou Graduação, Nome da Mãe, Profissão da Mãe, Caso a Mãe Seja Militar- Força Armada/Força Auxiliar, Caso a Mãe Seja Militar- Posto ou Graduação, Descrição
+- Na planilha "Chaves", o cabeçalho deve ter as seguintes colunas: Numero da Chave, Anterior, Atual, Última Alteração
+- Na planilha "Chaves", o cabeçalho deve ter as seguintes colunas: Numero da Chave, Nome da Chave, Anterior, Atual, Última Alteração
+- Na planilha "ParteAlta", o cabeçalho deve ter as seguintes colunas: Número Interno, Situação, Ano, Última Alteração
+- Na planilha "ChefeDia", o cabeçalho deve ter as seguintes colunas: DATAHORA, Nº AJOSCA, Nº CHEFE DE DIA, QUARTO DE SERVIÇO, COMPANHIA, PELOTÃO, QTD CINTOS, BANDEIRA ASP. NASCIMENTO, QTD ASP LICENCIADOS, QTD REGRESSOS, SITUAÇÃO COMPUTADOR/ALARME, SITUAÇÃO MAPA MUNDI
+
+
+- Ao preencher o Registro do Chefe de Dia, atentar para o padrão do QUARTO DE SERVIÇO: DDHHMMF MES-DDHHMMF MES, onde DD é o dia (deve ter os dois algarismos: 01,05,11,...), HH são as horas (01,08,18,21,...) MM são os minutos (também dois algarismos: 01,09,35,...), F é o fuso horário representado em um caractere apena, e MES é a sigla de três letras(maiúsculas) do mês em questão (JAN, FEV, MAR, ABR, MAI,...).  
+
+
+- Sitreps e Pontos para se ter atenção quanto a formatação:
+* A coluna 'Data de Nascimento' da Planilha PBEN deve estar formatada como data (Se não o fizer aparece um número inteiro aleatório)
+* Tentar arrumar o dicionario do Claviculario, nao devemos precisar de 5 elementos o NOME_CHAVE pode ser só uma variavel, talvez
+
