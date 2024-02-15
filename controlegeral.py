@@ -15,7 +15,7 @@ import os, sys
 from kivy.resources import resource_add_path, resource_find
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import StringProperty, ObjectProperty
+from kivy.properties import StringProperty, ObjectProperty, ListProperty
 import pandas as pd
 from funcoes_aspirante import *
 from kivy.uix.boxlayout import BoxLayout
@@ -27,9 +27,10 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleview.views import RecycleDataViewBehavior
 
 EXTERN_FILE      = 'registro.txt'
-FILE_NAME        = 'teste.ods'
+FILE_NAME        = 'Plano de Busca do Corpo de Aspirantes 2024.ods'
 SHEET_CHEFE_DIA  = 'ChefeDia'
 SHEET_LICENCAS   = 'Licenças'
 SHEET_PBEN       = 'PBEN'
@@ -74,6 +75,7 @@ class SuporteScreen(Screen):
 class ControleGeralApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        global planilha
         self.pben = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_PBEN)
 
         self.aspirantes = cria_aspirantes(self.pben)
@@ -81,6 +83,7 @@ class ControleGeralApp(App):
         self.licencas = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_LICENCAS)
         self.licencas['Última Alteração'] = self.licencas['Última Alteração'].astype('str')
         self.licencas['Número Interno']   = self.licencas['Número Interno'].astype('str')
+        planilha = self.licencas.copy()
 
         self.popup_content = Label(text='Salvando...', color=(0.18, 0.28, 0.40, 1), bold=True)
         self.popup_salvando_licenca = Popup(title='Salvando', content=self.popup_content,
@@ -107,7 +110,6 @@ class ControleGeralApp(App):
         self.organiza_segundo_partealta()
         self.organiza_terceiro_partealta()
         self.organiza_quarto_partealta()
-
         self.chefedia = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_CHEFE_DIA)
 
     """
@@ -147,6 +149,7 @@ class ControleGeralApp(App):
     lts_licenca            = StringProperty('0')
     licenciados_licenca    = StringProperty('0')
     stgt_licenca           = StringProperty('0')
+
     # LicencaPrimeiroAno
     abordo_licenca1         = StringProperty('0')
     baixado_licenca1        = StringProperty('0')
@@ -156,6 +159,7 @@ class ControleGeralApp(App):
     lts_licenca1            = StringProperty('0')
     licenciados_licenca1    = StringProperty('0')
     stgt_licenca1           = StringProperty('0')
+    resumo_licenca1         = ListProperty([])
     # LicencaSegundoAno
     abordo_licenca2         = StringProperty('0')
     baixado_licenca2        = StringProperty('0')
@@ -165,6 +169,7 @@ class ControleGeralApp(App):
     lts_licenca2            = StringProperty('0')
     licenciados_licenca2    = StringProperty('0')
     stgt_licenca2           = StringProperty('0')
+    resumo_licenca2         = ListProperty([])
     # LicencaTerceiroAno
     abordo_licenca3         = StringProperty('0')
     baixado_licenca3        = StringProperty('0')
@@ -174,6 +179,7 @@ class ControleGeralApp(App):
     lts_licenca3            = StringProperty('0')
     licenciados_licenca3    = StringProperty('0')
     stgt_licenca3           = StringProperty('0')
+    resumo_licenca3         = ListProperty([])
     # LicencaQuartoAno
     abordo_licenca4         = StringProperty('0')
     baixado_licenca4        = StringProperty('0')
@@ -183,6 +189,7 @@ class ControleGeralApp(App):
     lts_licenca4            = StringProperty('0')
     licenciados_licenca4    = StringProperty('0')
     stgt_licenca4           = StringProperty('0')
+    resumo_licenca4         = ListProperty([])
 
     # Claviculário
     chaves_salvou           = StringProperty('Sem alterações')
@@ -249,6 +256,7 @@ class ControleGeralApp(App):
     bandeira_cd             = StringProperty()
     licenciados_cd          = StringProperty()
     regressos_cd            = StringProperty()
+    
 
     def build(self):
         # Create the screen manager
@@ -340,17 +348,17 @@ class ControleGeralApp(App):
 
     def salvar_alteracoes(self):
 
-        with pd.ExcelWriter(FILE_NAME) as writer:
+        with pd.ExcelWriter(resource_path(FILE_NAME)) as writer:
             self.licencas.to_excel(  writer, sheet_name=SHEET_LICENCAS  , index=False)
             self.pben.to_excel(      writer, sheet_name=SHEET_PBEN      , index=False)
             self.chaves.to_excel(    writer, sheet_name=SHEET_CHAVES    , index=False)
             self.partealta.to_excel( writer, sheet_name=SHEET_PARTE_ALTA, index=False)
             self.chefedia.to_excel(  writer, sheet_name=SHEET_CHEFE_DIA , index=False)
 
-        self.licencas = pd.read_excel( FILE_NAME, sheet_name=SHEET_LICENCAS  )
-        self.chaves = pd.read_excel(   FILE_NAME, sheet_name=SHEET_CHAVES    )
-        self.partealta = pd.read_excel(FILE_NAME, sheet_name=SHEET_PARTE_ALTA)
-        self.chefedia = pd.read_excel( FILE_NAME, sheet_name=SHEET_CHEFE_DIA )
+        self.licencas = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_LICENCAS  )
+        self.chaves = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_CHAVES    )
+        self.partealta = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_PARTE_ALTA)
+        self.chefedia = pd.read_excel( resource_path(FILE_NAME), sheet_name=SHEET_CHEFE_DIA )
 
         self.licencas['Última Alteração']  = self.licencas['Última Alteração'].astype('str')
         self.licencas['Número Interno']    = self.licencas['Número Interno'].astype('str')
@@ -551,19 +559,35 @@ class ControleGeralApp(App):
         except:
             self.stgt_licenca4 = '0'
 
-    def cria_scroll_situacao_licenciamento(self, ano):
-        licencas = self.licencas
-        match ano:
-            case 1:
-                df_final = licencas[licencas['Número Interno'].apply(lambda x: x[0]) == '1'][['Número Interno', 'Nome de Guerra','Situação']]
-            case 2:
-                df_final = licencas[licencas['Número Interno'].apply(lambda x: x[0]) == '2'][['Número Interno', 'Nome de Guerra','Situação']]
-            case 3:
-                df_final = licencas[licencas['Número Interno'].apply(lambda x: x[0]) == '3'][['Número Interno', 'Nome de Guerra','Situação']]
-            case 4:
-                df_final = licencas[(licencas['Número Interno'].apply(lambda x: x[0]) == '4') | (licencas['Número Interno'].apply(lambda x: x[0]) == 'F') | (licencas['Número Interno'].apply(lambda x: x[0]) == 'I')][['Número Interno', 'Nome de Guerra','Situação']]
-
-        return df_final
+    def atualiza_resumo_licenciamentos(self):
+        self.licencas = pd.read_excel(resource_path(FILE_NAME), sheet_name=SHEET_LICENCAS)
+        self.licencas['Última Alteração'] = self.licencas['Última Alteração'].astype('str')
+        self.licencas['Número Interno']   = self.licencas['Número Interno'].astype('str')
+        resumo1, resumo2, resumo3, resumo4 = [], [], [], []
+        df_final = self.licencas[self.licencas['Número Interno'].apply(lambda x: x[0]) == '1'][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
+            resumo1.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
+        df_final = self.licencas[self.licencas['Número Interno'].apply(lambda x: x[0]) == '2'][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
+            resumo2.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
+        df_final = self.licencas[self.licencas['Número Interno'].apply(lambda x: x[0]) == '3'][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
+            resumo3.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
+        df_final = self.licencas[(self.licencas['Número Interno'].apply(lambda x: x[0]) == '4') | (self.licencas['Número Interno'].apply(lambda x: x[0]) == 'F') | (self.licencas['Número Interno'].apply(lambda x: x[0]) == 'I')][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
+            resumo4.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
+        
+        #self.resumo_licenca1, self.resumo_licenca2, self.resumo_licenca3, self.resumo_licenca4 = resumo1.copy(), resumo2.copy(), resumo3.copy(), resumo4.copy()
+        registro_licencas = self.sm.get_screen('registrolicencas')
+        scroller1_instance = registro_licencas.ids.scroller1
+        scroller2_instance = registro_licencas.ids.scroller2
+        scroller3_instance = registro_licencas.ids.scroller3
+        scroller4_instance = registro_licencas.ids.scroller4
+        scroller1_instance.atualizar(resumo1)
+        scroller2_instance.atualizar(resumo2)
+        scroller3_instance.atualizar(resumo3)
+        scroller4_instance.atualizar(resumo4)
+        
 
     def input_texto_chave(self, chave_pesquisa):
 
@@ -978,41 +1002,57 @@ class ControleGeralApp(App):
             reg.text = ''
             quarto_servico.text = 'FORMATO FORA DO PADRÃO'
 
-class ScrollerPage1(RecycleView, ControleGeralApp):
+class ScrollerPage1(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        df = self.cria_scroll_situacao_licenciamento(1)
         data = []
-        for index, row in df.iterrows():
+        df_final = planilha[planilha['Número Interno'].apply(lambda x: x[0]) == '1'][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
-        self.data = data.copy()
+        self.data = data
 
-class ScrollerPage2(RecycleView, ControleGeralApp):
-    def __init__(self, **kwargs, ):
-        super().__init__(**kwargs)
-        df = self.cria_scroll_situacao_licenciamento(2)
-        data = []
-        for index, row in df.iterrows():
-            data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
-        self.data = data.copy()
+    def atualizar(self, data):
+        self.data = data
+        self.refresh_from_data()
 
-class ScrollerPage3(RecycleView, ControleGeralApp):
+class ScrollerPage2(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        df = self.cria_scroll_situacao_licenciamento(3)
         data = []
-        for index, row in df.iterrows():
+        df_final = planilha[planilha['Número Interno'].apply(lambda x: x[0]) == '2'][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
-        self.data = data.copy()
+        self.data = data
 
-class ScrollerPage4(RecycleView, ControleGeralApp):
+    def atualizar(self, data):
+        self.data = data
+        self.refresh_from_data()
+
+class ScrollerPage3(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        df = self.cria_scroll_situacao_licenciamento(4)
         data = []
-        for index, row in df.iterrows():
+        df_final = planilha[planilha['Número Interno'].apply(lambda x: x[0]) == '3'][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
-        self.data = data.copy()
+        self.data = data
+
+    def atualizar(self, data):
+        self.data = data
+        self.refresh_from_data()
+
+class ScrollerPage4(RecycleView):
+    def __init__(self, **kwargs, ):
+        super().__init__(**kwargs)
+        data = []
+        df_final = planilha[(planilha['Número Interno'].apply(lambda x: x[0]) == '4') | (planilha['Número Interno'].apply(lambda x: x[0]) == 'F') | (planilha['Número Interno'].apply(lambda x: x[0]) == 'I')][['Número Interno', 'Nome de Guerra','Situação']]
+        for index, row in df_final.iterrows():
+            data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}'})
+        self.data = data
+
+    def atualizar(self, data):
+        self.data = data
+        self.refresh_from_data()
 
 
 def resource_path(relative_path):

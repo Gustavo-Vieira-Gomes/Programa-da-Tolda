@@ -34,7 +34,11 @@ def cria_aspirantes(pben):
         aspirante.quarto_habilitacao = pben['Quarto/Habilitação'][i]
         aspirante.telefone = pben['Telefone de Contato'][i]
         aspirante.celular = pben['Celular de Contato'][i]
-        aspirante.data_nascimento = pben['Data de Nascimento'][i]
+        try:
+            aspirante.data_nascimento = pben['Data de Nascimento'][i].strftime('%d/%m/%Y')
+        except:
+            aspirante.data_nascimento = pben['Data de Nascimento'][i]
+            
         aspirante.sangue = pben['Tipo Sanguíneo +Fator RH'][i]
         aspirante.equipe = pben['Equipe'][i]
         aspirante.email = pben['E-mail'][i]
@@ -43,7 +47,7 @@ def cria_aspirantes(pben):
         aspirante.estado = pben['Estado'][i]
         aspirante.bairro = pben['Bairro'][i]
         aspirante.endereco = pben['Endereço'][i]
-        aspirante.cep = pben['CEP'][i]
+        #aspirante.cep = pben['CEP'][i]
         aspirante.nome_pai = pben['Nome do Pai'][i]
         aspirante.profissao_pai = pben['Profissão do Pai'][i]
         aspirante.forca_militar_pai = pben['Caso o Pai Seja Militar- Força Armada/Força Auxiliar'][i]
@@ -52,7 +56,7 @@ def cria_aspirantes(pben):
         aspirante.profissao_mae = pben['Profissão da Mãe'][i]
         aspirante.forca_militar_mae = pben['Caso a Mãe Seja Militar- Força Armada/Força Auxiliar'][i]
         aspirante.cargo_militar_mae = pben['Caso a Mãe Seja Militar- Posto ou Graduação'][i]
-        aspirante.adicional = pben['Descrição'][i]
+        #aspirante.adicional = pben['Descrição'][i]
 
         aspirantes.append(aspirante)
     

@@ -787,7 +787,9 @@ MenuScreen
         size_hint: .15, 1
         text: 'Salvar Alterações'
         on_press: app.popup_salvando_licenca.open()
-        on_release: app.salvar_alteracoes()
+        on_release:
+            app.salvar_alteracoes()
+            app.atualiza_resumo_licenciamentos()
         background_color: 0.7, 0.56, 0.4, 1
         text_color: 0.77,0.77,0.77,1
         bold: True
@@ -1332,9 +1334,13 @@ MenuScreen
                 cols: 4
 
                 ScrollerPage1:
+                    id: scroller1
                 ScrollerPage2:
+                    id: scroller2
                 ScrollerPage3:
+                    id: scroller3
                 ScrollerPage4:
+                    id: scroller4
 
             Label:
                 size_hint_y:0.4
@@ -2436,29 +2442,24 @@ MenuScreen
         BoxLayout:
             size_hint: 1, 1
             BoxLayout:
-                orientation:'vertical'
+                orientation:'horizontal'
                 BoxLayout:
                     size_hint: 1,1
+                    orientation: 'vertical'
+                    padding: 0, 100, 0, 0
+                    
+                    Label:
+                        text: '2ºTEN MICALOSKI'
+                        color: 0.18, 0.28, 0.40, 1
+                        bold: True
+                        size_hint: 1,.2
 
                     GridLayout:
                         spacing: "10dp"
                         size_hint: 1,.8
-                        cols: 1
-
+                        cols: 2
                         Label:
                             text: 'ASP HARTMANN'
-                            color: 0.18, 0.28, 0.40, 1
-                            bold: True
-                            size_hint: 1,.2
-
-                        Label:
-                            text: 'ASP LUCAS MORAES'
-                            color: 0.18, 0.28, 0.40, 1
-                            bold: True
-                            size_hint: 1,.2
-
-                        Label:
-                            text: 'ASP NUNES TRINDADE'
                             color: 0.18, 0.28, 0.40, 1
                             bold: True
                             size_hint: 1,.2
@@ -2468,8 +2469,33 @@ MenuScreen
                             color: 0.18, 0.28, 0.40, 1
                             bold: True
                             size_hint: 1,.2
+
                         Label:
-                            size_hint: 1,.3
+                            text: 'ASP NUNES TRINDADE'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+                        
+                        Label:
+                            text: 'ASP LUCAS MORAES'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+
+                        Label:
+                            text: 'ASP GUSTAVO VIEIRA'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+
+                        Label:
+                            text: 'ASP PERDIGÃO'
+                            color: 0.18, 0.28, 0.40, 1
+                            bold: True
+                            size_hint: 1,.2
+
+                    Label:
+                        size_hint: 1,.3
         RodapeSuporte:
             size_hint: 1, .05
     AnchorLayout:
@@ -2493,11 +2519,12 @@ MenuScreen
         pos_hint: {'center_x': 30, 'center_y': -0.2}
 
     Label:
-        text: 'SUPORTE'
+        text: 'EQUIPE DE DESENVOLVIMENTO'
         color: 0.18, 0.28, 0.40, 1
         bold: True
         font_size: "28sp"
         size_hint: .8, 1
+        padding: 0, 100, 0, 0
 
     Image:
         source: 'LogoEN.png'
@@ -2515,7 +2542,3 @@ MenuScreen
     Label:
         size_hint: .5, 1
     Label:
-        text: 'CRIADO POR MICALOSKI'
-        color: 0.18, 0.28, 0.40, 1
-        bold: True
-        size_hint: .2, 1
