@@ -22,6 +22,7 @@ from datetime import datetime, timedelta
 from kivy.uix.recycleview import RecycleView
 from banco_de_dados import DatabaseTolda
 import os
+import pdb
 
 EXTERN_FILE      = 'registro.txt'
 SHEET_CHEFE_DIA  = 'ChefeDia'
@@ -291,7 +292,7 @@ class ControleGeralApp(App):
         else:
             try:
                 if button_text == 'Regresso':
-                    DatabaseTolda().update_info('Licenças', 'Situação', 'A bordo', 'Número Interno', self.numero_atual)
+                    DatabaseTolda().update_info('Licenças', 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
                     self.registro_externo_regs_lics("REG", datetime.now())
 
                 else:
@@ -319,7 +320,7 @@ class ControleGeralApp(App):
     def organiza_controle_geral_licenca(self):
         data = DatabaseTolda()
         try:
-            self.abordo_licenca =  data.contar_info('Licenças', 'Situação', 'A bordo')
+            self.abordo_licenca =  data.contar_info('Licenças', 'Situação', 'A Bordo')
         except:
             self.abordo_licenca = '0'
 
@@ -360,7 +361,7 @@ class ControleGeralApp(App):
 
     def organiza_primeiro_licenca(self):
         try:
-            self.abordo_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'A bordo', 1)
+            self.abordo_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'A Bordo', 1)
         except:
             self.abordo_licenca1 = '0' 
         try:
@@ -910,7 +911,7 @@ class ControleGeralApp(App):
 class ScrollerPage1(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
         data = []
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 1')
         for index, row in df_final.iterrows():
@@ -920,6 +921,7 @@ class ScrollerPage1(RecycleView):
     def atualizar(self):
         data = []
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 1')
+        pdb.set_trace()
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
@@ -928,7 +930,7 @@ class ScrollerPage1(RecycleView):
 class ScrollerPage2(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
         data = []
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 2')
         for index, row in df_final.iterrows():
@@ -946,7 +948,7 @@ class ScrollerPage2(RecycleView):
 class ScrollerPage3(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
         data = []
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 3')
         for index, row in df_final.iterrows():
@@ -964,7 +966,7 @@ class ScrollerPage3(RecycleView):
 class ScrollerPage4(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
         data = []
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 4')
         for index, row in df_final.iterrows():

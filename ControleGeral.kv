@@ -675,7 +675,6 @@ MenuScreen
                         on_press:
                             app.consultar_licenca(chave_pesquisa.text)
                             app.atualiza_licenca(app.BOTAO_PRESSIONADO)
-                        on_release:
                             app.sm.get_screen('registrolicencas').ids.scroller1.atualizar()
                             app.sm.get_screen('registrolicencas').ids.scroller2.atualizar()
                             app.sm.get_screen('registrolicencas').ids.scroller3.atualizar()
@@ -1247,8 +1246,8 @@ MenuScreen
 <ScrollerPage4>:
     viewclass:"Button"
     RecycleBoxLayout:
-        padding: 10
-        spacing: 10
+        padding: 0
+        spacing: 5
         default_size: None, 30
         default_size_hint: 1, None
         size_hint_y: None
