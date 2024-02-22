@@ -675,6 +675,7 @@ MenuScreen
                         on_press:
                             app.consultar_licenca(chave_pesquisa.text)
                             app.atualiza_licenca(app.BOTAO_PRESSIONADO)
+                        on_release:
                             app.sm.get_screen('registrolicencas').ids.scroller1.atualizar()
                             app.sm.get_screen('registrolicencas').ids.scroller2.atualizar()
                             app.sm.get_screen('registrolicencas').ids.scroller3.atualizar()

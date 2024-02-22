@@ -920,8 +920,8 @@ class ScrollerPage1(RecycleView):
 
     def atualizar(self):
         data = []
+        print('cheguei aqui')
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 1')
-        pdb.set_trace()
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
