@@ -504,7 +504,13 @@ class ControleGeralApp(App):
         if info_chaves[0] == 'Chave não encontrada':
             self.chave_nome = 'Chave não encontrada'
         else:
-            self.chave_nome = info_chaves[0] + ' - ' + info_chaves[1]
+            if len(info_chaves[1]) > 45:
+                palavras = info_chaves[1].split(' ')
+                primeira_metade = ' '.join(palavras[0: len(palavras)//2+1])
+                segunda_metade = ' '.join(palavras[len(palavras)//2+1:])
+                self.chave_nome = info_chaves[0] + ' - ' + '\n'.join([primeira_metade, segunda_metade])
+            else:
+                self.chave_nome = info_chaves[0] + ' - ' + info_chaves[1]
         self.chave_anteriormente_com = info_chaves[2]
         self.chave_atualmente_com = info_chaves[3]
         self.chave_ultima_alteracao = info_chaves[4]
@@ -1044,19 +1050,6 @@ class ScrollerParteAlta4(RecycleView):
             data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
         self.data = data
         self.refresh_from_data()
-
-
-def resource_path(relative_path):
-    """ Get the absolute path to the resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath("")
-
-    return os.path.join(base_path, relative_path)
-
-
 
 if __name__ == '__main__':
     # se o arquivo não existir, cria-o. Dessa maneira, evita-se erros relacionados à abertura futura do EXTERN_FILE

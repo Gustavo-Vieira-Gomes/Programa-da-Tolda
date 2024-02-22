@@ -1,11 +1,11 @@
 import sqlite3
 import pandas as pd
-import datetime
-import numpy as np
+import os
+import sys
 
 class DatabaseTolda:
     def __init__(self) -> None:
-        self.conn = sqlite3.connect('database_tolda.db')
+        self.conn = sqlite3.connect(resource_path('database_tolda.db'))
         self.c = self.conn.cursor()
     
     def criar_database(self, arquivo_excel):
@@ -66,14 +66,13 @@ class DatabaseTolda:
         self.conn.close()    
         
 
-    
+def resource_path(relative_path):
+    """ Get the absolute path to the resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath("")
 
-
-
-
-
-
-
-
-
+    return os.path.join(base_path, relative_path)
 
