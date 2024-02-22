@@ -675,6 +675,11 @@ MenuScreen
                         on_press:
                             app.consultar_licenca(chave_pesquisa.text)
                             app.atualiza_licenca(app.BOTAO_PRESSIONADO)
+                        on_release:
+                            app.sm.get_screen('registrolicencas').ids.scroller1.atualizar()
+                            app.sm.get_screen('registrolicencas').ids.scroller2.atualizar()
+                            app.sm.get_screen('registrolicencas').ids.scroller3.atualizar()
+                            app.sm.get_screen('registrolicencas').ids.scroller4.atualizar()
                             chave_pesquisa.text = ''
                         background_color: 0.7, 0.56, 0.4, 1
                         text_color: 0.77,0.77,0.77,1
@@ -777,22 +782,6 @@ MenuScreen
             size_hint: .2, 1
     Label:
         size_hint: .5, 1
-    Label:
-        size_hint: .2, 1
-        text: app.licenca_salvou
-        color: 0.18, 0.28, 0.40, 1
-        bold: True
-
-    Button:
-        size_hint: .15, 1
-        text: 'Salvar Alterações'
-        on_press: app.popup_salvando_licenca.open()
-        on_release:
-            app.salvar_alteracoes()
-            app.atualiza_resumo_licenciamentos()
-        background_color: 0.7, 0.56, 0.4, 1
-        text_color: 0.77,0.77,0.77,1
-        bold: True
 
     Label:
         text: ''
@@ -1431,25 +1420,6 @@ MenuScreen
             size_hint: .2, 1
     Label:
         size_hint: .5, 1
-    Label:
-        size_hint: .2, 1
-        text: app.chaves_salvou
-        color: 0.18, 0.28, 0.40, 1
-        bold: True
-
-    Button:
-        size_hint: .15, 1
-        text: 'Salvar Alterações'
-        on_press: app.popup_salvando_licenca.open()
-        on_release: app.salvar_alteracoes()    
-        background_color: 0.7, 0.56, 0.4, 1
-        text_color: 0.77,0.77,0.77,1
-        bold: True
-    Label:
-        text: ''
-        color: 0.18, 0.28, 0.40, 1
-        bold: True
-        size_hint: .2, 1
 
 <Interface_Chaves@FloatLayout>:
 
@@ -1764,6 +1734,11 @@ MenuScreen
                             app.consultar_partealta(chave_pesquisa.text)
                             app.atualiza_partealta(app.botao_parte_alta)
                             chave_pesquisa.text = ''
+                        on_release:
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_1.atualizar()
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_2.atualizar()
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_3.atualizar()
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_4.atualizar()
                         background_color: 0.7, 0.56, 0.4, 1
                         text_color: 0.77,0.77,0.77,1
                         bold: True
@@ -1784,6 +1759,21 @@ MenuScreen
 
         Rodape_ParteAlta:
             size_hint: 1, .05
+
+    GridLayout:
+        rows: 1
+        pos_hint: {'right': 1 , 'top': .05}
+        size_hint: .1, .05
+        Button:
+            text: 'Registro Parte Alta'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'registropartealta'
+                print ('Registro de Licenças')
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
     AnchorLayout:
         size_hint: .05, .05
         anchor_x: 'left'
@@ -1827,20 +1817,8 @@ MenuScreen
             size_hint: .2, 1
     Label:
         size_hint: .5, 1
-    Label:
-        size_hint: .2, 1
-        text: app.partealta_salvou
-        color: 0.18, 0.28, 0.40, 1
-        bold: True
 
-    Button:
-        size_hint: .15, 1
-        text: 'Salvar Alterações'
-        on_press: app.popup_salvando_licenca.open()
-        on_release: app.salvar_alteracoes()    
-        background_color: 0.7, 0.56, 0.4, 1
-        text_color: 0.77,0.77,0.77,1
-        bold: True
+
     Label:
         text: ''
         color: 0.18, 0.28, 0.40, 1
@@ -2205,7 +2183,151 @@ MenuScreen
             text: app.biblioteca_partealta
             color: 0.18, 0.28, 0.40, 1
             bold: True
-    
+
+#ScrollerParteAlta1
+<ScrollerParteAlta1>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#ScrollerParteAlta2
+<ScrollerParteAlta2>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#ScrollerParteAlta3
+<ScrollerParteAlta3>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#ScrollerParteAlta4
+<ScrollerParteAlta4>:
+    viewclass:"Button"
+    RecycleBoxLayout:
+        padding: 10
+        spacing: 10
+        default_size: None, 30
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+#RegistroParteAlta
+<RegistroParteAltaScreen>
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, .05
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 1.5
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+
+            Label:
+                text: 'REGISTRO DE ACESSO À PARTE BAIXA'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, .75
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 1.5
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        #Corpo Registro Parte Alta
+        GridLayout:
+            rows: 4
+            size_hint: 1 , .3
+            Label:
+                size_hint: .1, 0.3
+
+            #Interface Registro Parte Alta
+            GridLayout:
+                size_hint: .3, .2
+                cols: 4
+                Label:
+                    text: '1º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+                Label:
+                    text: '2º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+                Label:
+                    text: '3º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+                Label:
+                    text: '4º ANO'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+
+            #Scrol Registro Parte Alta
+            GridLayout:
+                size_hint: 1, 1
+                cols: 4
+
+                ScrollerParteAlta1:
+                    id: scroller_parte_alta_1
+                ScrollerParteAlta2:
+                    id: scroller_parte_alta_2
+                ScrollerParteAlta3:
+                    id: scroller_parte_alta_3
+                ScrollerParteAlta4:
+                    id: scroller_parte_alta_4
+
+            Label:
+                size_hint_y:0.4
+    Label:
+        size_hint_y:0.4
+
+    AnchorLayout:
+        size_hint: .15, .05
+        anchor_x: 'left'
+        achor_y: 'bottom'
+        Button:
+            text: 'Acesso à Parte Baixa'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'partealta'
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+
+
 #Chefe dia
 <ChefeDiaScreen>
     BoxLayout:
@@ -2218,9 +2340,10 @@ MenuScreen
         orientation: "vertical"
         TopoChefeDia:
             size_hint: 1, .1
-
+        Label:
+            size_hint: .2, .1
         BoxLayout:
-            size_hint: 1, .85
+            size_hint: 1, .75
             BoxLayout:
                 orientation:'vertical'
                 BoxLayout:
@@ -2358,8 +2481,7 @@ MenuScreen
                             background_color: 0.7, 0.56, 0.4, 1
                             text_color: 0.77,0.77,0.77,1
                             bold: True
-                            on_press: app.popup_salvando_licenca.open()
-                            on_release:
+                            on_press:
                                 app.att_numero_ajosca_cd(n_ajosca)
                                 app.att_quarto_de_serviço_cd(quarto_de_servico)
                                 app.att_numero_chefe_cd(numero_chefe)
@@ -2370,12 +2492,34 @@ MenuScreen
                                 app.att_mapamundi_cd(mapa)
                                 app.att_bandeira_cd(bandeira)
 
-
                                 app.registra_chefe_dia()
+
                     Label:
                         size_hint: .2,1
         RodapeChefeDia:
             size_hint: 1, .05
+
+    GridLayout:
+        rows: 1
+        pos_hint: {'right': 1 , 'top': .05}
+        size_hint: .15, .05
+        Button:
+            text: 'Baixar Registros Anteriores'
+            on_press:
+                app.download_registros_cd()
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
+    GridLayout:
+        rows: 1
+        pos_hint: {'right': .57 , 'top': .05}
+        size_hint: .15, .05
+        Label:
+            text: app.status_download_cd
+            color: 0.18, 0.28, 0.40, 1
+            bold: True
+
     AnchorLayout:
         size_hint: .05, .05
         anchor_x: 'left'
@@ -2385,6 +2529,7 @@ MenuScreen
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
+                app.status_download_cd = ''
             background_color: 0.7, 0.56, 0.4, 1
             text_color: 0.77,0.77,0.77,1
             bold: True  
@@ -2419,12 +2564,9 @@ MenuScreen
     Label:
         size_hint: .5, 1
     Label:
-        text: ''
         color: 0.18, 0.28, 0.40, 1
         bold: True
-        size_hint: .2, 1
-
-
+        size_hint: 1, 1
 
 #SUPORTE
 <SuporteScreen>
