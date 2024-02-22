@@ -667,6 +667,11 @@ MenuScreen
                             app.consultar_licenca(self.text)
                             app.atualiza_licenca(app.BOTAO_PRESSIONADO)
                             chave_pesquisa.text = ''
+                            app.sm.get_screen('registrolicencas').ids.scroller1.atualizar()
+                            app.sm.get_screen('registrolicencas').ids.scroller2.atualizar()
+                            app.sm.get_screen('registrolicencas').ids.scroller3.atualizar()
+                            app.sm.get_screen('registrolicencas').ids.scroller4.atualizar()
+                            chave_pesquisa.text = ''
 
                     Button:
                         text: 'Selecionar'
@@ -1724,6 +1729,10 @@ MenuScreen
                         on_text_validate:
                             app.consultar_partealta(chave_pesquisa.text)
                             app.atualiza_partealta(app.botao_parte_alta)
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_1.atualizar()
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_2.atualizar()
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_3.atualizar()
+                            app.sm.get_screen('registropartealta').ids.scroller_parte_alta_4.atualizar()
                             chave_pesquisa.text = ''
 
                     Button:
