@@ -984,7 +984,7 @@ class ScrollerPage4(RecycleView):
 class ScrollerParteAlta1(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink'}
         data = []
         df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 1')
         for index, row in df_final.iterrows():
@@ -1002,7 +1002,7 @@ class ScrollerParteAlta1(RecycleView):
 class ScrollerParteAlta2(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink'}
         data = []
         df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 2')
         for index, row in df_final.iterrows():
@@ -1020,7 +1020,7 @@ class ScrollerParteAlta2(RecycleView):
 class ScrollerParteAlta3(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink' }
         data = []
         df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 3')
         for index, row in df_final.iterrows():
@@ -1038,7 +1038,7 @@ class ScrollerParteAlta3(RecycleView):
 class ScrollerParteAlta4(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink'}
         data = []
         df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 4')
         for index, row in df_final.iterrows():
