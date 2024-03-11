@@ -290,22 +290,21 @@ class ControleGeralApp(App):
         if button_text == "":
             pass
         else:
-            try:
-                if button_text == 'Regresso':
-                    DatabaseTolda().update_info('Licenças', 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
-                    self.registro_externo_regs_lics("REG", datetime.now())
+            if DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual) != 'BAIXA':
+                try:
+                    if button_text == 'Regresso':
+                        DatabaseTolda().update_info('Licenças', 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
+                        self.registro_externo_regs_lics("REG", datetime.now())
 
-                else:
-                    DatabaseTolda().update_info('Licenças', 'Situação', button_text, 'Número Interno', self.numero_atual)
-                    if button_text == "Licença":
-                        self.registro_externo_regs_lics("LIC", datetime.now())
+                    else:
+                        DatabaseTolda().update_info('Licenças', 'Situação', button_text, 'Número Interno', self.numero_atual)
+                        if button_text == "Licença":
+                            self.registro_externo_regs_lics("LIC", datetime.now())
+                    DatabaseTolda().update_info('Licenças', 'Última Alteração', datetime.now().strftime('%d/%m/%Y %H:%M'), 'Número Interno', self.numero_atual)
 
-
-                DatabaseTolda().update_info('Licenças', 'Última Alteração', datetime.now().strftime('%d/%m/%Y %H:%M'), 'Número Interno', self.numero_atual)
-
-            except:
-                self.numero_atual = 'Selecione um aspirante'
-                self.nome_guerra = ''
+                except:
+                    self.numero_atual = 'Selecione um aspirante'
+                    self.nome_guerra = ''
 
         info_licencas = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table('Licenças'))
         self.situacao_atual_licenca = info_licencas[0]
