@@ -20,9 +20,13 @@ from funcoes_aspirante import *
 from kivy.core.window import Window
 from datetime import datetime, timedelta
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 from banco_de_dados import DatabaseTolda
+from sqlite3 import connect
 import os
 import pdb
+import time
 
 EXTERN_FILE      = 'registro.txt'
 SHEET_CHEFE_DIA  = 'ChefeDia'
@@ -65,7 +69,14 @@ class SuporteScreen(Screen):
 class RegistroParteAltaScreen(Screen):
     pass
 
+class AdminScreen(Screen):
+    pass
 
+class IniciarScreen(Screen):
+    pass
+
+class FileChooserScreen(Screen):
+    pass
 
 class ControleGeralApp(App):
     def __init__(self, **kwargs):
@@ -90,12 +101,28 @@ class ControleGeralApp(App):
         self.organiza_quarto_partealta()
         self.chefedia = DatabaseTolda().pegar_table(SHEET_CHEFE_DIA)
 
+        self.popup_errolog= Label(text='Usuário/Senha incorretos',color = (0.18, 0.28, 0.40, 1), bold= True)
+        self.popup_erro_login = Popup(title ='ERRO!',
+                                            content = self.popup_errolog,
+                                            size_hint=(None, None), size=(300, 300))
+        
+        self.popup_successlog = Label(text='Operação Realizada\n com Sucesso',color = (0.18, 0.28, 0.40, 1), bold= True)
+        self.popup_success_operation = Popup(title ='Sucesso!',
+                                            content = self.popup_successlog,
+                                            size_hint=(None, None), size=(300, 300))
+        self.popup_operation_errorlog = Label(text='Erro Ao realizar a Operação,\n tente novamente.',color = (0.18, 0.28, 0.40, 1), bold= True)
+        self.popup_operation_error = Popup(title ='ERRO!',
+                                            content = self.popup_operation_errorlog,
+                                            size_hint=(None, None), size=(300, 300))
+        
+
     """
         Ao iniciar o programa, isso deixará os campos de informação limpos
     """
 
     nome_guerra  = StringProperty()
     numero_atual = StringProperty()
+    tela_antiga  = StringProperty()
     # Alterar datas
     numero_interno_2023 = StringProperty()
     numero_interno_2022 = StringProperty()
@@ -237,6 +264,9 @@ class ControleGeralApp(App):
     def build(self):
         # Create the screen manager
         self.sm = ScreenManager()
+        self.sm.add_widget(IniciarScreen(name='inicioscreen'))
+        self.sm.add_widget(AdminScreen(name='adminscreen'))
+        self.sm.add_widget(FileChooserScreen(name='filechooserscreen'))
         self.sm.add_widget(MenuScreen(name='menu'))
         self.sm.add_widget(PbenScreen(name='pben'))
         self.sm.add_widget(LicencaScreen(name='licenca'))
@@ -248,6 +278,36 @@ class ControleGeralApp(App):
         self.sm.add_widget(SuporteScreen(name='suporte'))
 
         return self.sm
+
+    def verifica_user(self, login, senha):
+        if login=="tolda" and senha=="tolda":
+            self.user_menu = "menu"
+        elif login=="admin" and senha=="admin":
+            self.user_menu = "adminscreen"
+        else:
+            self.user_menu = "inicioscreen"
+            self.popup_erro_login.open()
+
+    def erro_login(self):
+        time.sleep(0.5)
+        self.popup_erro_login.dismiss()
+
+    def atualizar_bd(self, arquivo_excel):
+        try:
+            DatabaseTolda().criar_database(arquivo_excel[0])
+            print(arquivo_excel[0])
+        except:
+            self.popup_operation_error.open()
+        else:
+            self.refresh_app()
+            self.popup_success_operation.open()
+
+
+    def atualizar_coluna_bd(self):
+        pass
+
+    def excluir_registros(self):
+        pass
 
     def consulta_pben(self, chave_pesquisa):
         aspirante = busca_aspirante(self.aspirantes, chave_pesquisa)
@@ -284,6 +344,39 @@ class ControleGeralApp(App):
         arq.write(situacao+' '+str(horario.year)+' '+str(horario.month)+' '+str(horario.day)+' '+str(horario.hour)+' '+str(horario.minute)+'\n')
 
         arq.close()
+
+    def refresh_app(self):
+        self.organiza_controle_geral_licenca()
+        self.organiza_primeiro_licenca()
+        self.organiza_segundo_licenca()
+        self.organiza_terceiro_licenca()
+        self.organiza_quarto_licenca()
+        self.organiza_claviculario()
+        self.organiza_controle_geral_partealta()
+        self.organiza_primeiro_partealta()
+        self.organiza_segundo_partealta()
+        self.organiza_terceiro_partealta()
+        self.organiza_quarto_partealta()
+        self.sm.get_screen('registrolicencas').ids.scroller1.atualizar()
+        self.sm.get_screen('registrolicencas').ids.scroller2.atualizar()
+        self.sm.get_screen('registrolicencas').ids.scroller3.atualizar()
+        self.sm.get_screen('registrolicencas').ids.scroller4.atualizar()
+
+    def reiniciar_licenca_reg(self, situação):
+        try:
+            conn = connect('database_tolda.db')
+            c = conn.cursor()
+            sql = f"UPDATE Licenças SET [Situação] = '{situação}' WHERE  [Situação] <> 'BAIXA'"
+            c.execute(sql)
+            conn.commit()
+            c.close()
+            self.refresh_app()
+            self.popup_success_operation.open()
+        except Exception as e:
+            print(e)
+            self.popup_operation_error.open()
+
+
 
     def atualiza_licenca(self, button_text):
         print("Botão pressionado: " + button_text)

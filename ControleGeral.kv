@@ -1,4 +1,287 @@
-MenuScreen
+IniciarScreen
+
+#INICIAR
+<IniciarScreen>:
+    login: login
+    senha: senha
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, .1
+            padding: 0, 20, 0, 0
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+            Label:
+                text: 'CONTROLE GERAL'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, 1
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        BoxLayout:
+            size_hint: 1, .85
+            BoxLayout:
+                size_hint: .8, 1
+                spacing: "20dp"
+                orientation: 'vertical'
+                Label:
+                    size_hint: .1, .1
+                Label:
+                    text: 'LOGIN:'
+                    size_hint: .4, .05
+                    pos_hint: {'center_x': .57, 'center_y': .5}
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+                TextInput:
+                    id: login
+                    write_tab: False
+                    size_hint: .4, .05
+                    pos_hint: {'center_x': .57, 'center_y': .5}
+                    multiline: False
+                Label:
+                    text: 'SENHA:'
+                    size_hint: .4, .05
+                    pos_hint: {'center_x':.57, 'center_y': .5}
+                    text_size: self.size
+                    halign: 'left'
+                    valign: 'middle'
+                    color: 0.18, 0.28, 0.40, 1
+                    bold: True
+                TextInput:
+                    id: senha
+                    password: True
+                    size_hint: .4, .05
+                    pos_hint: {'center_x': .57, 'center_y': .5}
+                    multiline: False
+                Label:
+                    size_hint: .1, .2
+                Button:
+                    text: 'INICIAR'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .57, 'center_y': .5}
+                    size_hint: .4,.1
+                    on_press: 
+                        app.verifica_user(login.text,senha.text)
+                    on_release:
+                        root.manager.current = app.user_menu
+                        app.erro_login()
+                        login.text=""
+                        senha.text=""
+                    bold: True
+                    elevation: 10
+            Label:
+                size_hint: .1, 1
+
+        BoxLayout:
+            size_hint: 1, .2
+            padding: '20dp'
+            Label:
+                size_hint: .85, 1
+            Button:
+                text: "SAIR"
+                size_hint: .15, 1
+                width: self.height
+                anchor_x: 'right'
+                anchor_y: 'bottom'
+                on_press:
+                    app.stop()
+                background_color: 0.7, 0.56, 0.4, 1
+                text_color: 0.77,0.77,0.77,1
+                bold: True
+
+#FileChooserScreen
+<FileChooserScreen>
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, .1
+            padding: 0, 20, 0, 0
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+            Label:
+                text: 'ADMINISTRAÇÃO'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, 1
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        BoxLayout:
+            size_hint: 1, .85
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            Label:
+                size_hint: .1, 1
+            BoxLayout:
+                size_hint: .8, .75
+                spacing: "20dp"
+                orientation: 'vertical'
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                FileChooserIconView:
+                    id: filechooser
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    on_selection:
+                        app.atualizar_bd(filechooser.selection)
+                        root.manager.transition.direction = 'down'
+                        root.manager.current = 'adminscreen'
+                        #app.fechar_popup_sitrep(app.popup_number)
+                Button:
+                    text: 'VOLTAR'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    on_press:
+                        root.manager.transition.direction = 'down'
+                        root.manager.current = 'adminscreen'
+                    bold: True
+                    elevation: 10
+
+
+
+# MENU ADMIN 
+<AdminScreen>:
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.77,0.77,0.77,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        orientation: "vertical"
+        BoxLayout:
+            size_hint: 1, .1
+            padding: 0, 20, 0, 0
+            Image:
+                source: 'LogoM.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': 30, 'center_y': -0.2}
+        
+            Label:
+                text: 'ADMINISTRAÇÃO'
+                color: 0.18, 0.28, 0.40, 1
+                bold: True
+                font_size: "28sp"
+                size_hint: .8, 1
+
+            Image:
+                source: 'LogoEN.png'
+                size: self.texture_size
+                size_hint: .57, 2
+                pos_hint: {'center_x': -30, 'center_y': -0.2}
+
+        BoxLayout:
+            size_hint: 1, .85
+            Label:
+                size_hint: .1, 1
+            BoxLayout:
+                size_hint: .8, .75
+                spacing: "20dp"
+                orientation: 'vertical'
+                Button:
+                    text: 'Atualizar BD'
+                    on_release:
+                        root.manager.transition.direction = 'right'
+                        root.manager.current = 'filechooserscreen'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    bold: True
+                Button:
+                    text: 'Excluir Registros Anteriores'
+                    on_release: # app.excluir_registros
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    size_hint: .6,.1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    bold: True
+                BoxLayout:
+                    size_hint: .6, .1
+                    spacing: "20dp"
+                    orientation: 'horizontal'
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    Button:
+                        text: 'Licenciar Todos os Aspirantes'
+                        on_release: app.reiniciar_licenca_reg('Licença')
+                        background_color: 0.7, 0.56, 0.4, 1
+                        text_color: 0.77,0.77,0.77,1
+                        size_hint: .6,.8
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        bold: True
+                    Button:
+                        text: 'Regressar todos os Aspirantes'
+                        on_release: app.reiniciar_licenca_reg('A Bordo')
+                        background_color: 0.7, 0.56, 0.4, 1
+                        text_color: 0.77,0.77,0.77,1
+                        size_hint: .6,.8
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        bold: True
+
+
+                Button:
+                    text: 'VOLTAR'
+                    background_color: 0.7, 0.56, 0.4, 1
+                    text_color: 0.77,0.77,0.77,1
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: .6,.1
+                    on_press:
+                        root.manager.transition.direction = 'down'
+                        root.manager.current = 'inicioscreen'
+                        app.user_menu=""
+                    bold: True
+                    elevation: 10
+            Label:
+                size_hint: .1, 1
+
+        AnchorLayout:
+            size_hint: .07, 0.05
+            anchor_x: 'left'
+            achor_y: 'bottom'
+            Button:
+                text: 'Suporte'
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    app.tela_antiga = 'adminscreen'
+                    root.manager.current = 'suporte'
+                background_color: 0.7, 0.56, 0.4, 1
+                text_color: 0.77,0.77,0.77,1
+                bold: True
 
 #MENU
 
@@ -81,13 +364,17 @@ MenuScreen
                     size_hint: .6,.1
                     bold: True
                 Button:
-                    text: 'SAIR'
+                    text: 'LOGOUT'
                     background_color: 0.7, 0.56, 0.4, 1
                     text_color: 0.77,0.77,0.77,1
                     pos_hint: {'center_x': .5, 'center_y': .5}
                     size_hint: .6,.1
-                    on_press: app.stop() 
+                    on_press:
+                        root.manager.transition.direction = 'down'
+                        root.manager.current = 'inicioscreen'
+                        app.user_menu=""
                     bold: True
+                    elevation: 10
             Label:
                 size_hint: .1, 1
 
@@ -99,6 +386,7 @@ MenuScreen
                 text: 'Suporte'
                 on_press:
                     root.manager.transition.direction = 'right'
+                    app.tela_antiga = 'menu'
                     root.manager.current = 'suporte'
                 background_color: 0.7, 0.56, 0.4, 1
                 text_color: 0.77,0.77,0.77,1
@@ -2655,10 +2943,10 @@ MenuScreen
         anchor_x: 'left'
         achor_y: 'bottom'
         Button:
-            text: 'Menu'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
-                root.manager.current = 'menu'
+                root.manager.current = app.tela_antiga
             background_color: 0.7, 0.56, 0.4, 1
             text_color: 0.77,0.77,0.77,1
             bold: True
