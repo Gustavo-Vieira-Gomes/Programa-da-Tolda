@@ -3,3 +3,4 @@ Projeto_Tolda
 __pycache__
 build/
 b.txt
+dist/

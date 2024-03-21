@@ -29,11 +29,9 @@ import pdb
 import time
 
 EXTERN_FILE      = 'registro.txt'
-SHEET_CHEFE_DIA  = 'ChefeDia'
 SHEET_LICENCAS   = 'Licenças'
 SHEET_PBEN       = 'PBEN'
 SHEET_CHAVES     = 'Chaves'
-SHEET_PARTE_ALTA = 'ParteAlta'
 
 Window.size = (1250, 650)
 
@@ -45,7 +43,7 @@ class PbenScreen(Screen):
 
 
 class LicencaScreen(Screen):
-    chave_pesquisa = ObjectProperty(None)
+    chave_pesquisa_lic = ObjectProperty(None)
 
 
 class RegistroLicencasScreen(Screen):
@@ -54,19 +52,7 @@ class RegistroLicencasScreen(Screen):
 class ChavesScreen(Screen):
     pass
 
-
-class ParteAltaScreen(Screen):
-    pass
-
-
-class ChefeDiaScreen(Screen):
-    pass
-
-
 class SuporteScreen(Screen):
-    pass
-
-class RegistroParteAltaScreen(Screen):
     pass
 
 class AdminScreen(Screen):
@@ -89,17 +75,8 @@ class ControleGeralApp(App):
         self.organiza_primeiro_licenca()
         self.organiza_segundo_licenca()
         self.organiza_terceiro_licenca()
-        self.organiza_quarto_licenca()
-
         self.chaves = DatabaseTolda().pegar_table(SHEET_CHAVES)
         self.organiza_claviculario()
-
-        self.organiza_controle_geral_partealta()
-        self.organiza_primeiro_partealta()
-        self.organiza_segundo_partealta()
-        self.organiza_terceiro_partealta()
-        self.organiza_quarto_partealta()
-        self.chefedia = DatabaseTolda().pegar_table(SHEET_CHEFE_DIA)
 
         self.popup_errolog= Label(text='Usuário/Senha incorretos',color = (0.18, 0.28, 0.40, 1), bold= True)
         self.popup_erro_login = Popup(title ='ERRO!',
@@ -127,7 +104,6 @@ class ControleGeralApp(App):
     numero_interno_2023 = StringProperty()
     numero_interno_2022 = StringProperty()
     numero_interno_2021 = StringProperty()
-    numero_interno_2020 = StringProperty()
     nome_completo       = StringProperty()
     nascimento          = StringProperty()
     telefone            = StringProperty()
@@ -135,8 +111,8 @@ class ControleGeralApp(App):
     email               = StringProperty()
     companhia           = StringProperty()
     pelotao             = StringProperty()
-    camarote            = StringProperty()
-    quarto              = StringProperty()
+    equipe              = StringProperty()
+    tel_emergencia      = StringProperty()
     nip                 = StringProperty()
     sangue              = StringProperty()
 
@@ -145,55 +121,53 @@ class ControleGeralApp(App):
     ultima_alteracao_licenca = StringProperty()
     texto_input_licenca      = StringProperty()
     # LicencaGeral
-    abordo_licenca         = StringProperty('0')
-    baixado_licenca        = StringProperty('0')
-    crestricao_licenca     = StringProperty('0')
-    dispdomiciliar_licenca = StringProperty('0')
-    hnmd_licenca           = StringProperty('0')
-    lts_licenca            = StringProperty('0')
-    licenciados_licenca    = StringProperty('0')
-    stgt_licenca           = StringProperty('0')
+    abordo_licenca            = StringProperty('0')
+    baixado_licenca           = StringProperty('0')
+    visitacao_licenca         = StringProperty('0')
+    dispdomiciliar_licenca    = StringProperty('0')
+    hnmd_licenca              = StringProperty('0')
+    lts_licenca               = StringProperty('0')
+    stgt_licenca              = StringProperty('0')
+    uism_licenca              = StringProperty('0')
+    licenciados_rio_licenca   = StringProperty('0')
+    licenciados_angra_licenca = StringProperty('0')
 
     # LicencaPrimeiroAno
-    abordo_licenca1         = StringProperty('0')
-    baixado_licenca1        = StringProperty('0')
-    crestricao_licenca1     = StringProperty('0')
-    dispdomiciliar_licenca1 = StringProperty('0')
-    hnmd_licenca1           = StringProperty('0')
-    lts_licenca1            = StringProperty('0')
-    licenciados_licenca1    = StringProperty('0')
-    stgt_licenca1           = StringProperty('0')
-    resumo_licenca1         = ListProperty([])
+    abordo_licenca1            = StringProperty('0')
+    baixado_licenca1           = StringProperty('0')
+    visitacao_licenca1         = StringProperty('0')
+    dispdomiciliar_licenca1    = StringProperty('0')
+    hnmd_licenca1              = StringProperty('0')
+    lts_licenca1               = StringProperty('0')
+    stgt_licenca1              = StringProperty('0')
+    uism_licenca1              = StringProperty('0')
+    licenciados_rio_licenca1   = StringProperty('0')
+    licenciados_angra_licenca1 = StringProperty('0')
+    resumo_licenca1            = ListProperty([])
     # LicencaSegundoAno
-    abordo_licenca2         = StringProperty('0')
-    baixado_licenca2        = StringProperty('0')
-    crestricao_licenca2     = StringProperty('0')
-    dispdomiciliar_licenca2 = StringProperty('0')
-    hnmd_licenca2           = StringProperty('0')
-    lts_licenca2            = StringProperty('0')
-    licenciados_licenca2    = StringProperty('0')
-    stgt_licenca2           = StringProperty('0')
+    abordo_licenca2           = StringProperty('0')
+    baixado_licenca2          = StringProperty('0')
+    visitacao_licenca2        = StringProperty('0')
+    dispdomiciliar_licenca2   = StringProperty('0')
+    hnmd_licenca2             = StringProperty('0')
+    lts_licenca2              = StringProperty('0')
+    stgt_licenca2             = StringProperty('0')
+    uism_licenca2             = StringProperty('0')
+    licenciados_rio_licenca2  = StringProperty('0')
+    licenciados_angra_licenca2= StringProperty('0')
     resumo_licenca2         = ListProperty([])
     # LicencaTerceiroAno
-    abordo_licenca3         = StringProperty('0')
-    baixado_licenca3        = StringProperty('0')
-    crestricao_licenca3     = StringProperty('0')
-    dispdomiciliar_licenca3 = StringProperty('0')
-    hnmd_licenca3           = StringProperty('0')
-    lts_licenca3            = StringProperty('0')
-    licenciados_licenca3    = StringProperty('0')
-    stgt_licenca3           = StringProperty('0')
+    abordo_licenca3           = StringProperty('0')
+    baixado_licenca3          = StringProperty('0')
+    visitacao_licenca3        = StringProperty('0')
+    dispdomiciliar_licenca3   = StringProperty('0')
+    hnmd_licenca3             = StringProperty('0')
+    lts_licenca3              = StringProperty('0')
+    stgt_licenca3             = StringProperty('0')
+    uism_licenca3             = StringProperty('0')
+    licenciados_rio_licenca3  = StringProperty('0')
+    licenciados_angra_licenca3= StringProperty('0')
     resumo_licenca3         = ListProperty([])
-    # LicencaQuartoAno
-    abordo_licenca4         = StringProperty('0')
-    baixado_licenca4        = StringProperty('0')
-    crestricao_licenca4     = StringProperty('0')
-    dispdomiciliar_licenca4 = StringProperty('0')
-    hnmd_licenca4           = StringProperty('0')
-    lts_licenca4            = StringProperty('0')
-    licenciados_licenca4    = StringProperty('0')
-    stgt_licenca4           = StringProperty('0')
-    resumo_licenca4         = ListProperty([])
 
     # Claviculário
     chave_input             = StringProperty() #Objeto de pesquisa
@@ -203,63 +177,6 @@ class ControleGeralApp(App):
     chave_ultima_alteracao  = StringProperty()
     chaves_claviculario     = StringProperty()
     chaves_fora             = StringProperty()
-
-    # Parte Baixa
-    situacao_atual_partealta   = StringProperty()
-    ultima_alteracao_partealta = StringProperty()
-    partealta_input            = StringProperty()
-    # ParteBaixa1Ano
-    partealta_partelta1     = StringProperty()
-    tfm_partealta1          = StringProperty()
-    saladeestado_partealta1 = StringProperty()
-    enfermaria_partealta1   = StringProperty()
-    banco_partealta1        = StringProperty()
-    biblioteca_partealta1   = StringProperty()
-    # ParteBaixa2Ano
-    partealta_partelta2     = StringProperty()
-    tfm_partealta2          = StringProperty()
-    saladeestado_partealta2 = StringProperty()
-    enfermaria_partealta2   = StringProperty()
-    banco_partealta2        = StringProperty()
-    biblioteca_partealta2   = StringProperty()
-    # ParteBaixa3Ano
-    partealta_partelta3     = StringProperty()
-    tfm_partealta3          = StringProperty()
-    saladeestado_partealta3 = StringProperty()
-    enfermaria_partealta3   = StringProperty()
-    banco_partealta3        = StringProperty()
-    biblioteca_partealta3   = StringProperty()
-    # ParteBaixa4Ano
-    partealta_partelta4     = StringProperty()
-    tfm_partealta4          = StringProperty()
-    saladeestado_partealta4 = StringProperty()
-    enfermaria_partealta4   = StringProperty()
-    banco_partealta4        = StringProperty()
-    biblioteca_partealta4   = StringProperty()
-    # ParteBaixaGeral
-    partealta_partelta     = StringProperty()
-    tfm_partealta          = StringProperty()
-    saladeestado_partealta = StringProperty()
-    enfermaria_partealta   = StringProperty()
-    banco_partealta        = StringProperty()
-    biblioteca_partealta   = StringProperty()
-
-    # Chefe do Dia
-    chefedodia_registrando1 = StringProperty()
-    chefedodia_registrando2 = StringProperty()
-    numero_ajosca_cd        = StringProperty()
-    quarto_de_serviço_cd    = StringProperty()
-    numero_chefe_cd         = StringProperty()
-    companhia_cd            = StringProperty()
-    pelotao_cd              = StringProperty()
-    cintos_cd               = StringProperty()
-    computador_cd           = StringProperty()
-    mapamundi_cd            = StringProperty()
-    bandeira_cd             = StringProperty()
-    licenciados_cd          = StringProperty()
-    regressos_cd            = StringProperty()
-    status_download_cd      = StringProperty()
-    
 
     def build(self):
         # Create the screen manager
@@ -272,9 +189,6 @@ class ControleGeralApp(App):
         self.sm.add_widget(LicencaScreen(name='licenca'))
         self.sm.add_widget(RegistroLicencasScreen(name='registrolicencas'))
         self.sm.add_widget(ChavesScreen(name='chaves'))
-        self.sm.add_widget(ParteAltaScreen(name='partealta'))
-        self.sm.add_widget(RegistroParteAltaScreen(name='registropartealta'))
-        self.sm.add_widget(ChefeDiaScreen(name='chefedia'))
         self.sm.add_widget(SuporteScreen(name='suporte'))
 
         return self.sm
@@ -303,9 +217,6 @@ class ControleGeralApp(App):
             self.popup_success_operation.open()
 
 
-    def atualizar_coluna_bd(self):
-        pass
-
     def excluir_registros(self):
         pass
 
@@ -317,15 +228,14 @@ class ControleGeralApp(App):
         self.numero_interno_2023 = str(aspirante.numero_interno_2023)
         self.numero_interno_2022 = str(aspirante.numero_interno_2022)
         self.numero_interno_2021 = str(aspirante.numero_interno_2021)
-        self.numero_interno_2020 = str(aspirante.numero_interno_2020)
         self.nascimento = str(aspirante.data_nascimento)
         self.celular    = str(aspirante.celular)
         self.telefone   = str(aspirante.telefone)
         self.email      = str(aspirante.email)
         self.companhia  = str(aspirante.companhia)
         self.pelotao    = str(aspirante.pelotao)
-        self.camarote   = str(aspirante.alojamento)
-        self.quarto     = str(aspirante.quarto_habilitacao)
+        self.equipe   = str(aspirante.equipe)
+        self.tel_emergencia     = str(aspirante.tel_emergencia)
         self.nip        = str(aspirante.nip)
         self.sangue     = str(aspirante.sangue)
         self.nome_completo = str(aspirante.nome_completo)
@@ -334,7 +244,7 @@ class ControleGeralApp(App):
 
     def consultar_licenca(self, chave_pesquisa):
         self.consulta_pben(chave_pesquisa)
-        info_licencas = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table('Licenças'))
+        info_licencas = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table(SHEET_LICENCAS))
         self.situacao_atual_licenca = info_licencas[0]
         self.ultima_alteracao_licenca = info_licencas[1]
         print("Botão pressionado: " + self.BOTAO_PRESSIONADO)
@@ -350,23 +260,18 @@ class ControleGeralApp(App):
         self.organiza_primeiro_licenca()
         self.organiza_segundo_licenca()
         self.organiza_terceiro_licenca()
-        self.organiza_quarto_licenca()
         self.organiza_claviculario()
-        self.organiza_controle_geral_partealta()
-        self.organiza_primeiro_partealta()
-        self.organiza_segundo_partealta()
-        self.organiza_terceiro_partealta()
-        self.organiza_quarto_partealta()
         self.sm.get_screen('registrolicencas').ids.scroller1.atualizar()
         self.sm.get_screen('registrolicencas').ids.scroller2.atualizar()
         self.sm.get_screen('registrolicencas').ids.scroller3.atualizar()
-        self.sm.get_screen('registrolicencas').ids.scroller4.atualizar()
 
     def reiniciar_licenca_reg(self, situação):
         try:
             conn = connect('database_tolda.db')
             c = conn.cursor()
             sql = f"UPDATE Licenças SET [Situação] = '{situação}' WHERE  [Situação] <> 'BAIXA'"
+            c.execute(sql)
+            sql = f"UPDATE Licenças SET [Última Alteração] = '{datetime.now().strftime('%d/%m/%Y %H:%M')}' WHERE  [Situação] <> 'BAIXA'"
             c.execute(sql)
             conn.commit()
             c.close()
@@ -377,29 +282,30 @@ class ControleGeralApp(App):
             self.popup_operation_error.open()
 
 
-
     def atualiza_licenca(self, button_text):
         print("Botão pressionado: " + button_text)
         if button_text == "":
             pass
         else:
-            if DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual) != 'BAIXA':
+            if DatabaseTolda().pegar_info(SHEET_LICENCAS, 'Situação', 'Número Interno', self.numero_atual) != 'BAIXA':
                 try:
                     if button_text == 'Regresso':
-                        DatabaseTolda().update_info('Licenças', 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
+                        DatabaseTolda().update_info(SHEET_LICENCAS, 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
                         self.registro_externo_regs_lics("REG", datetime.now())
 
                     else:
-                        DatabaseTolda().update_info('Licenças', 'Situação', button_text, 'Número Interno', self.numero_atual)
-                        if button_text == "Licença":
-                            self.registro_externo_regs_lics("LIC", datetime.now())
-                    DatabaseTolda().update_info('Licenças', 'Última Alteração', datetime.now().strftime('%d/%m/%Y %H:%M'), 'Número Interno', self.numero_atual)
+                        DatabaseTolda().update_info(SHEET_LICENCAS, 'Situação', button_text, 'Número Interno', self.numero_atual)
+                        if button_text == "Licença Angra":
+                            self.registro_externo_regs_lics("LIC ANGRA", datetime.now())
+                        elif button_text == 'Licença Rio':
+                            self.registro_externo_regs_lics('LIC RIO', datetime.now())
+                    DatabaseTolda().update_info(SHEET_LICENCAS, 'Última Alteração', datetime.now().strftime('%d/%m/%Y %H:%M'), 'Número Interno', self.numero_atual)
 
                 except:
                     self.numero_atual = 'Selecione um aspirante'
                     self.nome_guerra = ''
 
-        info_licencas = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table('Licenças'))
+        info_licencas = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table(SHEET_LICENCAS))
         self.situacao_atual_licenca = info_licencas[0]
         self.ultima_alteracao_licenca = info_licencas[1]
 
@@ -407,186 +313,191 @@ class ControleGeralApp(App):
         self.organiza_primeiro_licenca()
         self.organiza_segundo_licenca()
         self.organiza_terceiro_licenca()
-        self.organiza_quarto_licenca()
 
     def organiza_controle_geral_licenca(self):
-        data = DatabaseTolda()
         try:
-            self.abordo_licenca =  data.contar_info('Licenças', 'Situação', 'A Bordo')
+            self.abordo_licenca =  DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'A Bordo')
         except:
             self.abordo_licenca = '0'
 
         try:
-            self.baixado_licenca = data.contar_info('Licenças', 'Situação', 'Baixado')
+            self.baixado_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Baixado')
         except:
             self.baixado_licenca = '0'
 
         try:
-            self.crestricao_licenca = data.contar_info('Licenças', 'Situação', 'C/ Restrição')
+            self.visitacao_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Visitação')
         except:
-            self.crestricao_licenca = '0'
+            self.visitacao_licenca = '0'
 
         try:
-            self.dispdomiciliar_licenca = data.contar_info('Licenças', 'Situação', 'Disp. Domiciliar')
+            self.dispdomiciliar_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Disp. Domiciliar')
         except:
             self.dispdomiciliar_licenca = '0'
 
         try:
-            self.hnmd_licenca = data.contar_info('Licenças', 'Situação', 'HNMD')
+            self.hnmd_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'HNMD')
         except:
             self.hnmd_licenca = '0'
 
         try:
-            self.lts_licenca = data.contar_info('Licenças', 'Situação', 'LTS')
+            self.lts_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'LTS')
         except:
             self.lts_licenca = '0'
 
         try:
-            self.licenciados_licenca = data.contar_info('Licenças', 'Situação', 'Licença')
+            self.licenciados_angra_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Angra')
         except:
-            self.licenciados_licenca = '0'
+            self.licenciados_angra_licenca = '0'
 
         try:
-            self.stgt_licenca = data.contar_info('Licenças', 'Situação', 'ST/GT')
+            self.licenciados_rio_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Rio')
+        except:
+            self.licenciados_rio_licenca = '0'
+
+        try:
+            self.stgt_licenca = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'ST/GT')
         except:
             self.stgt_licenca = '0'
 
     def organiza_primeiro_licenca(self):
         try:
-            self.abordo_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'A Bordo', 1)
+            self.abordo_licenca1 =  DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'A Bordo', 1)
         except:
-            self.abordo_licenca1 = '0' 
+            self.abordo_licenca1 = '0'
+
         try:
-            self.baixado_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Baixado', 1)
+            self.baixado_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Baixado', 1)
         except:
             self.baixado_licenca1 = '0'
+
         try:
-            self.crestricao_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'C/ Restrição', 1)
+            self.visitacao_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Visitação', 1)
         except:
-            self.crestricao_licenca1 = '0'
+            self.visitacao_licenca1 = '0'
+
         try:
-            self.dispdomiciliar_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Disp. Domiciliar', 1)
+            self.dispdomiciliar_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Disp. Domiciliar', 1)
         except:
             self.dispdomiciliar_licenca1 = '0'
+
         try:
-            self.hnmd_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'HNMD', 1)
+            self.hnmd_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'HNMD', 1)
         except:
             self.hnmd_licenca1 = '0'
+
         try:
-            self.lts_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'LTS', 1)
+            self.lts_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'LTS', 1)
         except:
             self.lts_licenca1 = '0'
+
         try:
-            self.licenciados_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Licença', 1)
+            self.licenciados_angra_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Angra', 1)
         except:
-            self.licenciados_licenca1 = '0'
+            self.licenciados_angra_licenca1 = '0'
+
         try:
-            self.stgt_licenca1 = DatabaseTolda().contar_info('Licenças', 'Situação', 'ST/GT', 1)
+            self.licenciados_rio_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Rio', 1)
+        except:
+            self.licenciados_rio_licenca1 = '0'
+
+        try:
+            self.stgt_licenca1 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'ST/GT', 1)
         except:
             self.stgt_licenca1 = '0'
 
     def organiza_segundo_licenca(self):
         try:
-            self.abordo_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'A Bordo', 2)
+            self.abordo_licenca2 =  DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'A Bordo', 2)
         except:
             self.abordo_licenca2 = '0'
+
         try:
-            self.baixado_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Baixado', 2)
+            self.baixado_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Baixado', 2)
         except:
             self.baixado_licenca2 = '0'
+
         try:
-            self.crestricao_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'C/ Restrição', 2)
+            self.visitacao_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Visitação', 2)
         except:
-            self.crestricao_licenca2 = '0'
+            self.visitacao_licenca2 = '0'
+
         try:
-            self.dispdomiciliar_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Disp. Domiciliar', 2)
+            self.dispdomiciliar_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Disp. Domiciliar', 2)
         except:
             self.dispdomiciliar_licenca2 = '0'
+
         try:
-            self.hnmd_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'HNMD', 2)
+            self.hnmd_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'HNMD', 2)
         except:
             self.hnmd_licenca2 = '0'
+
         try:
-            self.lts_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'LTS', 2)
+            self.lts_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'LTS', 2)
         except:
             self.lts_licenca2 = '0'
+
         try:
-            self.licenciados_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Licença', 2)
+            self.licenciados_angra_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Angra', 2)
         except:
-            self.licenciados_licenca2 = '0'
+            self.licenciados_angra_licenca2 = '0'
+
         try:
-            self.stgt_licenca2 = DatabaseTolda().contar_info('Licenças', 'Situação', 'ST/GT', 2)
+            self.licenciados_rio_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Rio', 2)
+        except:
+            self.licenciados_rio_licenca2 = '0'
+
+        try:
+            self.stgt_licenca2 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'ST/GT', 2)
         except:
             self.stgt_licenca2 = '0'
 
     def organiza_terceiro_licenca(self):
         try:
-            self.abordo_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'A Bordo', 3)
+            self.abordo_licenca3 =  DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'A Bordo', 3)
         except:
             self.abordo_licenca3 = '0'
+
         try:
-            self.baixado_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Baixado', 3)
+            self.baixado_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Baixado', 3)
         except:
             self.baixado_licenca3 = '0'
+
         try:
-            self.crestricao_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'C/ Restrição', 3)
+            self.visitacao_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Visitação', 3)
         except:
-            self.crestricao_licenca3 = '0'
+            self.visitacao_licenca3 = '0'
+
         try:
-            self.dispdomiciliar_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Disp. Domiciliar', 3)
+            self.dispdomiciliar_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Disp. Domiciliar', 3)
         except:
             self.dispdomiciliar_licenca3 = '0'
+
         try:
-            self.hnmd_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'HNMD', 3)
+            self.hnmd_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'HNMD', 3)
         except:
             self.hnmd_licenca3 = '0'
+
         try:
-            self.lts_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'LTS', 3)
+            self.lts_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'LTS', 3)
         except:
             self.lts_licenca3 = '0'
+
         try:
-            self.licenciados_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Licença', 3)
+            self.licenciados_angra_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Angra', 3)
         except:
-            self.licenciados_licenca3 = '0'
+            self.licenciados_angra_licenca3 = '0'
+
         try:
-            self.stgt_licenca3 = DatabaseTolda().contar_info('Licenças', 'Situação', 'ST/GT', 3)
+            self.licenciados_rio_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'Licença Rio', 3)
+        except:
+            self.licenciados_rio_licenca3 = '0'
+
+        try:
+            self.stgt_licenca3 = DatabaseTolda().contar_info(SHEET_LICENCAS, 'Situação', 'ST/GT', 3)
         except:
             self.stgt_licenca3 = '0'
 
-    def organiza_quarto_licenca(self):
-        try:
-            self.abordo_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'A Bordo', 4)
-        except:
-            self.abordo_licenca4 = '0'
-        try:
-            self.baixado_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Baixado', 4)
-        except:
-            self.baixado_licenca4 = '0'
-        try:
-            self.crestricao_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'C/ Restrição', 4)
-        except:
-            self.crestricao_licenca4 = '0'
-        try:
-            self.dispdomiciliar_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Disp. Domiciliar', 4)
-        except:
-            self.dispdomiciliar_licenca4 = '0'
-        try:
-            self.hnmd_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'HNMD', 4)
-        except:
-            self.hnmd_licenca4 = '0'
-        try:
-            self.lts_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'LTS', 4)
-        except:
-            self.lts_licenca4 = '0'
-        try:
-            self.licenciados_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'Licença', 4)
-        except:
-            self.licenciados_licenca4 = '0'
-        try:
-            self.stgt_licenca4 = DatabaseTolda().contar_info('Licenças', 'Situação', 'ST/GT', 4)
-        except:
-            self.stgt_licenca4 = '0'
-        
     def input_texto_chave(self, chave_pesquisa):
 
         self.chave_input = chave_pesquisa
@@ -670,342 +581,14 @@ class ControleGeralApp(App):
         data = DatabaseTolda()
         self.chaves_claviculario = str(data.contar_info('Chaves', 'Atual', 'Claviculário'))
         self.chaves_fora = str(len(self.chaves.Atual) - int(self.chaves_claviculario))
-
-    def consultar_partealta(self, chave_pesquisa):
-        self.consulta_pben(chave_pesquisa)
-
-        info_partealta = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table(SHEET_PARTE_ALTA))
-        self.situacao_atual_partealta = info_partealta[0]
-        self.ultima_alteracao_partealta = info_partealta[1]
-
-    botao_parte_alta = StringProperty('')
-
-
-
-    def atualiza_partealta(self, button_text):
-        if button_text == '':
-            return
-        else:
-            try:
-                DatabaseTolda().update_info(SHEET_PARTE_ALTA, 'Situação', button_text, 'Número Interno', self.numero_atual)
-                momento_alt_situacao = datetime.now().strftime('%d/%m/%Y %H:%M')
-                DatabaseTolda().update_info(SHEET_PARTE_ALTA, 'Última Alteração', momento_alt_situacao, 'Número Interno', self.numero_atual)
-            except:
-                self.numero_atual = 'Selecione um aspirante'
-                self.nome_guerra = ''
-
-        self.situacao_atual_partealta = button_text
-        self.ultima_alteracao_partealta = momento_alt_situacao
-
-        self.organiza_controle_geral_partealta()
-        self.organiza_primeiro_partealta()
-        self.organiza_segundo_partealta()
-        self.organiza_terceiro_partealta()
-        self.organiza_quarto_partealta()
-
-    def organiza_controle_geral_partealta(self):
-        try:
-            self.partealta_partelta = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Parte Alta')
-        except:
-            self.partealta_partelta = '0'
-        try:
-            self.tfm_partealta = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'TFM')
-        except:
-            self.tfm_partealta = '0'
-        try:
-            self.saladeestado_partealta = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Sala de Estado')
-        except:
-            self.saladeestado_partealta = '0'
-        try:
-            self.enfermaria_partealta = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Enfermaria')
-        except:
-            self.enfermaria_partealta = '0'
-        try:
-            self.banco_partealta = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Banco')
-        except:
-            self.banco_partealta = '0'
-        try:
-            self.biblioteca_partealta = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Biblioteca')
-        except:
-            self.biblioteca_partealta = '0'
-
-    def organiza_primeiro_partealta(self):
-        try:
-            self.partealta_partelta1 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Parte Alta', 1)
-        except:
-            self.partealta_partelta1 = '0'
-        try:
-            self.tfm_partealta1 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'TFM', 1)
-        except:
-            self.tfm_partealta1 = '0'
-        try:
-            self.saladeestado_partealta1 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Sala de Estado', 1)
-        except:
-            self.saladeestado_partealta1 = '0'
-        try:
-            self.enfermaria_partealta1 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Enfermaria', 1)
-        except:
-            self.enfermaria_partealta1 = '0'
-        try:
-            self.banco_partealta1 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Banco', 1)
-        except:
-            self.banco_partealta1 = '0'
-        try:
-            self.biblioteca_partealta1 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Biblioteca', 1)
-        except:
-            self.biblioteca_partealta1 = '0'
-
-    def organiza_segundo_partealta(self):
-        try:
-            self.partealta_partelta2 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Parte Alta', 2)
-        except:
-            self.partealta_partelta2 = '0'
-        try:
-            self.tfm_partealta2 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'TFM', 2)
-        except:
-            self.tfm_partealta2 = '0'
-        try:
-            self.saladeestado_partealta2 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Sala de Estado', 2)
-        except:
-            self.saladeestado_partealta2 = '0'
-        try:
-            self.enfermaria_partealta2 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Enfermaria', 2)
-        except:
-            self.enfermaria_partealta2 = '0'
-        try:
-            self.banco_partealta2 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Banco', 2)
-        except:
-            self.banco_partealta2 = '0'
-        try:
-            self.biblioteca_partealta2 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Biblioteca', 2)
-        except:
-            self.biblioteca_partealta2 = '0'
-
-    def organiza_terceiro_partealta(self):
-        try:
-            self.partealta_partelta3 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Parte Alta', 3)
-        except:
-            self.partealta_partelta3 = '0'
-        try:
-            self.tfm_partealta3 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'TFM', 3)
-        except:
-            self.tfm_partealta3 = '0'
-        try:
-            self.saladeestado_partealta3 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Sala de Estado', 3)
-        except:
-            self.saladeestado_partealta3 = '0'
-        try:
-            self.enfermaria_partealta3 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Enfermaria', 3)
-        except:
-            self.enfermaria_partealta3 = '0'
-        try:
-            self.banco_partealta3 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Banco', 3)
-        except:
-            self.banco_partealta3 = '0'
-        try:
-            self.biblioteca_partealta3 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Biblioteca', 3)
-        except:
-            self.biblioteca_partealta3 = '0'
-
-    def organiza_quarto_partealta(self):
-        try:
-            self.partealta_partelta4 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Parte Alta', 4)
-        except:
-            self.partealta_partelta4 = '0'
-        try:
-            self.tfm_partealta4 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'TFM', 4)
-        except:
-            self.tfm_partealta4 = '0'
-        try:
-            self.saladeestado_partealta4 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Sala de Estado', 4)
-        except:
-            self.saladeestado_partealta4 = '0'
-        try:
-            self.enfermaria_partealta4 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Enfermaria', 4)
-        except:
-            self.enfermaria_partealta4 = '0'
-        try:
-            self.banco_partealta4 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Banco', 4)
-        except:
-            self.banco_partealta4 = '0'
-        try:
-            self.biblioteca_partealta4 = DatabaseTolda().contar_info('ParteAlta', 'Situação', 'Biblioteca', 4)
-        except:
-            self.biblioteca_partealta4 = '0'
-
-    def atualiza_chefedodia_registrando(self):
-        self.chefedodia_registrando1 = (
-                                           f'AjOSCA: {self.numero_ajosca_cd} | Quarto de Serviço: {self.quarto_de_serviço_cd} | Chefe de dia: {self.numero_chefe_cd} | '
-                                       ) + (
-                                           f'Cia.: {self.companhia_cd} | Pelotão: {self.pelotao_cd} | '
-                                       )
-
-        self.chefedodia_registrando2 = (
-                                           f'Computador/Alarme: {self.computador_cd} | Mapa-Mundi: {self.mapamundi_cd} | Bandeira Asp. Nasc.: {self.bandeira_cd} | '
-                                       ) + (
-                                           f'Cintos: {self.cintos_cd} | Licenciados: {self.licenciados_cd} | Regressos: {self.regressos_cd}')
-
-    def att_numero_ajosca_cd(self, textinput):
-        self.numero_ajosca_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_quarto_de_serviço_cd(self, textinput):
-        self.quarto_de_serviço_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_numero_chefe_cd(self, textinput):
-        self.numero_chefe_cd = textinput.text
-
-        aspirante = busca_aspirante(self.aspirantes, self.numero_chefe_cd)
-
-        self.numero_chefe_cd = str(aspirante.numero_interno_atual)
-        self.pelotao_cd = aspirante.pelotao
-        self.companhia_cd = aspirante.companhia
-
-        self.atualiza_chefedodia_registrando()
-
-    def att_cintos_cd(self, textinput):
-        self.cintos_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_regressos_cd(self, textinput):
-        self.regressos_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_licenciados_cd(self, textinput):
-        self.licenciados_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_computador_cd(self, textinput):
-        self.computador_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_mapamundi_cd(self, textinput):
-        self.mapamundi_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def att_bandeira_cd(self, textinput):
-        self.bandeira_cd = textinput.text
-        self.atualiza_chefedodia_registrando()
-
-    def registra_chefe_dia(self):
-        agora = datetime.now().strftime('%d/%m/%Y %H:%M')
-        DatabaseTolda().insert_row('ChefeDia', DATAHORA=agora, Nx_Ajosca=self.numero_ajosca_cd, Nx_CHEFE_DE_DIA=self.numero_chefe_cd, QUARTO_DE_SERVIÇO=self.quarto_de_serviço_cd, COMPANHIA=self.companhia_cd, PELOTÃO=self.pelotao_cd, QTD_CINTOS=self.cintos_cd, BANDEIRA_ASPz_NASCIMENTO=self.bandeira_cd, QTD_ASP_LICENCIADOS=self.licenciados_cd, QTD_REGRESSOS=self.regressos_cd, SITUAÇÃO_COMPUTADORyALARME=self.computador_cd, SITUAÇÃO_MAPA_MUNDI=self.mapamundi_cd)
-        #self.chefedia.loc[self.chefedia.index.max() + 1] = [agora,
-        #                                                    self.numero_ajosca_cd,
-        #                                                    self.numero_chefe_cd,
-        #                                                    self.quarto_de_serviço_cd,
-        #                                                    self.companhia_cd,
-        #                                                    self.pelotao_cd,
-        #                                                    self.cintos_cd,
-        #                                                    self.bandeira_cd,
-        #                                                    self.licenciados_cd,
-        #                                                    self.regressos_cd,
-        #                                                    self.computador_cd,
-        #                                                    self.mapamundi_cd]
-
-        #self.salvar_alteracoes()
-
-    def count_regs_lics(self,quarto_servico, lic, reg):
-        """
-            Padrão de escrita do quarto de serviço:
-                    DDHHMMF MES-DDHHMMF MES
-            , onde DD é o dia, HH é a hora, MM é o minuto, e MES é o mês
-        """
-
-        # cria um dicionário que associa a sigla do mês a um valor numérico inteiro, que é o número do mês no calendário
-        calend = {"JAN": 1, "FEV": 2, "MAR": 3, "ABR": 4,
-                  "MAI": 5, "JUN": 6, "JUL": 7, "AGO": 8,
-                  "SET": 9, "OUT": 10, "NOV": 11, "DEZ": 12}
-
-        try:
-            # separa o quarto de serviço em início e fim
-            quarto = quarto_servico.text.split('-')
-
-            # cria uma variável para o início do quarto
-            data_inicio = datetime(datetime.now().year,
-                                   calend[quarto[0][8:11]],
-                                   int(quarto[0][0:2]),
-                                   int(quarto[0][2:4]),
-                                   int(quarto[0][4:6])
-                                   )
-            # cria uma variável para o término do quarto
-            data_termino = datetime(datetime.now().year,
-                                    calend[quarto[1][8:11]],
-                                    int(quarto[1][0:2]),
-                                    int(quarto[1][2:4]),
-                                    int(quarto[1][4:6]),
-                                    )
-
-            # Zera os contadores para que seja feita a contagem
-            licencas = 0
-            regressos = 0
-
-            # Estabelece momento mais antigo em que um registro que está no EXTERN_FILE pode ter sido gravado
-            piso = datetime.now() - timedelta(days=3)
-
-            """
-                Abre o EXTERN_FILE e grava, na variável linhas, todo o conteúdo dele
-            """
-            with open(EXTERN_FILE, 'r') as file:
-                linhas = file.readlines()
-
-            """
-                Abre o  arquivo no modo ESCRITA para que possam ser regravadas as linhas com registros mais modernos
-            do que o momento estabelecido pela variável PISO. Além disso, é feita a contagem do número de licenças e
-            de regressos dentro do quarto de serviço estipulado.
-            """
-            with open(EXTERN_FILE, 'w') as file:
-
-                # Faz a análise dos registros linha por linha
-                for linha_inteira in linhas:
-                    linha = linha_inteira.split()
-
-                    # transforma o conteúdo da linha em uma variável do tipo DATETIME
-                    data_registro = datetime(int(linha[1]), int(linha[2]), int(linha[3]), int(linha[4]), int(linha[5]))
-
-                    # se o registro é mais moderno que o momento PISO:
-                    if data_registro > piso:
-
-                        # se o registro está dentro do quarto de serviço em questão:
-                        if data_inicio <= data_registro <= data_termino:
-
-                            if linha[0] == "LIC":
-                                licencas = licencas + 1
-                            elif linha[0] == "REG":
-                                regressos = regressos + 1
-                        # regrava os registros desejados no EXTERN_FILE
-                        file.write(linha_inteira)
-            # fecha o EXTERN_FILE
-            file.close()
-
-            # atualiza o texto das caixas de texto de Licenciados e Regressos para os valores calculados
-            lic.text = str(licencas)
-            reg.text = str(regressos)
-
-        except:
-            # dado que ocorreu um erro na execução por conta do formato da entrada do quarto de serviço, informa isso ao usuário
-            lic.text = ''
-            reg.text = ''
-            quarto_servico.text = 'FORMATO FORA DO PADRÃO'
-
-    def download_registros_cd(self):
-        df = DatabaseTolda().pegar_table(SHEET_CHEFE_DIA)
-        pasta_atual = os.getcwd()
-        caminho_arquivo = os.path.join(pasta_atual, 'registros chefe de dia.xlsx')
-        try:
-            df.to_excel(caminho_arquivo, sheet_name='registros CD', )
-        except:
-            self.status_download_cd = 'Não foi possível fazer o download'
-        else:
-            self.status_download_cd = 'Download concluído com Sucesso'
+        
 
 class ScrollerPage1(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença Rio': 'red', 'Licença Angra': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'ST/GT': 'grey', 'BAIXA': 'black', 'Visitação': 'grey', 'UISM': 'brown'}
         data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 1')
+        df_final = DatabaseTolda().pegar_table(SHEET_LICENCAS).query('Ano == 1')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
@@ -1013,7 +596,7 @@ class ScrollerPage1(RecycleView):
     def atualizar(self):
         data = []
         print('cheguei aqui')
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 1')
+        df_final = DatabaseTolda().pegar_table(SHEET_LICENCAS).query('Ano == 1')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
@@ -1022,16 +605,16 @@ class ScrollerPage1(RecycleView):
 class ScrollerPage2(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença Rio': 'red', 'Licença Angra': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'ST/GT': 'grey', 'BAIXA': 'black', 'Visitação': 'grey', 'UISM': 'brown'}
         data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 2')
+        df_final = DatabaseTolda().pegar_table(SHEET_LICENCAS).query('Ano == 2')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
 
     def atualizar(self):
         data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 2')
+        df_final = DatabaseTolda().pegar_table(SHEET_LICENCAS).query('Ano == 2')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
@@ -1040,108 +623,18 @@ class ScrollerPage2(RecycleView):
 class ScrollerPage3(RecycleView):
     def __init__(self, **kwargs, ):
         super().__init__(**kwargs)
-        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
+        self.dict_colors = {'A Bordo': 'green', 'Licença Rio': 'red', 'Licença Angra': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'ST/GT': 'grey', 'BAIXA': 'black', 'Visitação': 'grey', 'UISM': 'brown'}
         data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 3')
+        df_final = DatabaseTolda().pegar_table(SHEET_LICENCAS).query('Ano == 3')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
         self.data = data
 
     def atualizar(self):
         data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 3')
+        df_final = DatabaseTolda().pegar_table(SHEET_LICENCAS).query('Ano == 3')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
-        self.data = data
-        self.refresh_from_data()
-
-class ScrollerPage4(RecycleView):
-    def __init__(self, **kwargs, ):
-        super().__init__(**kwargs)
-        self.dict_colors = {'A Bordo': 'green', 'Licença': 'red', 'ST/GT': 'yellow', 'Disp. Domiciliar': 'purple', 'LTS': 'blue', 'HNMD': 'pink', 'Baixado': 'orange', 'C/ Restrição': 'grey', 'BAIXA': 'black'}
-        data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 4')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
-        self.data = data
-
-    def atualizar(self):
-        data = []
-        df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 4')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
-        self.data = data
-        self.refresh_from_data()
-
-class ScrollerParteAlta1(RecycleView):
-    def __init__(self, **kwargs, ):
-        super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink'}
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 1')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-
-    def atualizar(self):
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 1')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-        self.refresh_from_data()
-
-class ScrollerParteAlta2(RecycleView):
-    def __init__(self, **kwargs, ):
-        super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink'}
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 2')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-
-    def atualizar(self):
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 2')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-        self.refresh_from_data()
-
-class ScrollerParteAlta3(RecycleView):
-    def __init__(self, **kwargs, ):
-        super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink' }
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 3')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-
-    def atualizar(self):
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 3')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-        self.refresh_from_data()
-
-class ScrollerParteAlta4(RecycleView):
-    def __init__(self, **kwargs, ):
-        super().__init__(**kwargs)
-        self.dict_colors = {'Parte Alta': 'green', 'Enfermaria': 'red', 'Biblioteca': 'purple', 'TFM': 'blue', 'Sala de Estado': 'orange', 'Banco': 'grey', 'BAIXA': 'black', 'LTS': 'pink'}
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 4')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
-        self.data = data
-
-    def atualizar(self):
-        data = []
-        df_final = DatabaseTolda().pegar_table('ParteAlta').query('Ano == 4')
-        for index, row in df_final.iterrows():
-            data.append({'text': f'{row.values[0]} {DatabaseTolda().pegar_info('PBEN', 'Nome de Guerra', 'Número Interno Atual', row.values[0])} - {row.values[1]}', 'background_color': self.dict_colors[row.values[1]]})
         self.data = data
         self.refresh_from_data()
 

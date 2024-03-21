@@ -12,17 +12,13 @@ class DatabaseTolda:
         licencas = pd.read_excel(arquivo_excel, 'Licenças')
         pben = pd.read_excel(arquivo_excel, 'PBEN')
         chaves = pd.read_excel(arquivo_excel, 'Chaves')
-        parte_alta = pd.read_excel(arquivo_excel, 'ParteAlta')
-        chefe_de_dia = pd.read_excel(arquivo_excel, 'ChefeDia')
 
-        pben['Data de Nascimento'] = pben['Data de Nascimento'].astype('string').apply(lambda x: x.split(' ')[0])
-        pben.drop('Carimbo de data/hora', axis=1, inplace=True)
+        pben['NASC'] = pben['NASC'].astype('string').apply(lambda x: x.split(' ')[0])
 
         licencas.to_sql('Licenças', con=self.conn, if_exists='replace', index=False)
         pben.to_sql('PBEN', con=self.conn, if_exists='replace', index=False)
         chaves.to_sql('Chaves', con=self.conn, if_exists='replace', index=False)
-        parte_alta.to_sql('ParteAlta', con=self.conn, index=False, if_exists='replace')
-        chefe_de_dia.to_sql('ChefeDia', con=self.conn, index=False, if_exists='replace')
+
 
 
     def pegar_table(self, table):
@@ -57,13 +53,6 @@ class DatabaseTolda:
             return 'Não Encontrado'
         else:
             return informacao[0]
-        
-    def insert_row(self, table,**values):
-        data = {key.replace('_', ' ').replace('z', '.').replace('y', '/').replace('x', 'º'): [value] for key, value in values.items()}
-        df = pd.DataFrame(data)
-        df.to_sql(table, con=self.conn, if_exists='append', index=False)
-        self.c.close()
-        self.conn.close()    
         
 
 def resource_path(relative_path):

@@ -18,46 +18,31 @@ def cria_aspirantes(pben):
     for i in range(len(pben)):
         aspirante = Aspirante()
 
-        aspirante.numero_interno_atual = pben['Número Interno Atual'][i]
+        aspirante.numero_interno_atual = pben['NÚMERO'][i]
         #Alterar datas
-        aspirante.numero_interno_2023 = pben['Número Interno 2023'][i]
-        aspirante.numero_interno_2022 = pben['Número Interno 2022'][i]
-        aspirante.numero_interno_2021 = pben['Número Interno 2021'][i]
-        aspirante.numero_interno_2020 = pben['Número Interno 2020'][i]
-        aspirante.nome_guerra = pben['Nome de Guerra'][i]
-        aspirante.nome_completo = pben['Nome Completo'][i]
-        aspirante.companhia = pben['Companhia'][i]
-        aspirante.pelotao = pben['Pelotão'][i]
-        aspirante.alojamento = pben['Alojamento/Camarote'][i]
-        aspirante.nip = pben['N.I.P.'][i]
-        aspirante.id_militar = pben['Número da ID. Militar'][i]
-        aspirante.quarto_habilitacao = pben['Quarto/Habilitação'][i]
-        aspirante.telefone = pben['Telefone de Contato'][i]
-        aspirante.celular = pben['Celular de Contato'][i]
+        aspirante.numero_interno_2023 = pben['NÚMERO 2023'][i]
+        aspirante.numero_interno_2022 = pben['NÚMERO 2022'][i]
+        aspirante.numero_interno_2021 = pben['NÚMERO 2021'][i]
+        aspirante.nome_guerra = pben['NOME DE GUERRA'][i]
+        aspirante.nome_completo = pben['NOME COMPLETO'][i]
+        aspirante.companhia = pben['CIA'][i]
+        aspirante.pelotao = pben['PEL'][i]
+        aspirante.equipe = pben['EQUIPE'][i]
+        aspirante.nip = pben['NIP'][i]
+        aspirante.tel_emergencia = pben['RESPONSÁVEL'][i]
+        aspirante.telefone = pben['RESIDENCIAL'][i]
+        aspirante.celular = pben['CEL ALUNO'][i]
         try:
-            aspirante.data_nascimento = pben['Data de Nascimento'][i].strftime('%d/%m/%Y')
+            aspirante.data_nascimento = pben['NASC'][i].strftime('%d/%m/%Y')
         except:
-            aspirante.data_nascimento = pben['Data de Nascimento'][i]
+            aspirante.data_nascimento = pben['NASC'][i]
             
-        aspirante.sangue = pben['Tipo Sanguíneo +Fator RH'][i]
-        aspirante.equipe = pben['Equipe'][i]
-        aspirante.email = pben['E-mail'][i]
-        aspirante.religiao = pben['Religião'][i]
-        aspirante.cidade = pben['Cidade'][i]
-        aspirante.estado = pben['Estado'][i]
-        aspirante.bairro = pben['Bairro'][i]
-        aspirante.endereco = pben['Endereço'][i]
-        #aspirante.cep = pben['CEP'][i]
-        aspirante.nome_pai = pben['Nome do Pai'][i]
-        aspirante.profissao_pai = pben['Profissão do Pai'][i]
-        aspirante.forca_militar_pai = pben['Caso o Pai Seja Militar- Força Armada/Força Auxiliar'][i]
-        aspirante.cargo_militar_pai = pben['Caso o Pai Seja Militar- Posto ou Graduação'][i]
-        aspirante.nome_mae = pben['Nome da Mãe'][i]
-        aspirante.profissao_mae = pben['Profissão da Mãe'][i]
-        aspirante.forca_militar_mae = pben['Caso a Mãe Seja Militar- Força Armada/Força Auxiliar'][i]
-        aspirante.cargo_militar_mae = pben['Caso a Mãe Seja Militar- Posto ou Graduação'][i]
-        #aspirante.adicional = pben['Descrição'][i]
-
+        aspirante.sangue = pben['TIPO SANGUÍNEO DO ALUNO'][i]
+        aspirante.email = pben['EMAIL DO ALUNO'][i]
+        aspirante.endereco = pben['ENDEREÇO'][i]
+        aspirante.nome_pai = pben['NOME DO PAI'][i]
+        aspirante.nome_mae = pben['NOME DA MÃE'][i]
+        
         aspirantes.append(aspirante)
     
     return aspirantes
