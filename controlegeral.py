@@ -25,8 +25,8 @@ from kivy.uix.label import Label
 from banco_de_dados import DatabaseTolda
 from sqlite3 import connect
 import os
-import pdb
 import time
+from banco_de_dados import resource_path
 
 EXTERN_FILE      = 'registro.txt'
 SHEET_LICENCAS   = 'Licenças'
@@ -267,7 +267,7 @@ class ControleGeralApp(App):
 
     def reiniciar_licenca_reg(self, situação):
         try:
-            conn = connect('database_tolda.db')
+            conn = connect(resource_path('database_tolda.db'))
             c = conn.cursor()
             sql = f"UPDATE Licenças SET [Situação] = '{situação}' WHERE  [Situação] <> 'BAIXA'"
             c.execute(sql)
