@@ -497,7 +497,7 @@ IniciarScreen
         anchor_x: 'left'
         achor_y: 'bottom'
         Button:
-            text: 'Menu'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
@@ -1038,7 +1038,7 @@ IniciarScreen
         anchor_x: 'left'
         achor_y: 'bottom'
         Button:
-            text: 'Menu'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
@@ -1611,7 +1611,7 @@ IniciarScreen
                     color: 0.18, 0.28, 0.40, 1
                     bold: True
 
-            #Scrol Registro Licenca
+            #Scroll Registro Licenca
             GridLayout:
                 size_hint: 1, 1
                 cols: 4
@@ -1630,19 +1630,31 @@ IniciarScreen
     Label:
         size_hint_y:0.4
 
+    GridLayout:
+        rows: 1
+        pos_hint: {'right': 1 , 'top': .05}
+        size_hint: .15, .05
+
+        Button:
+            text: 'Download Registro Semanal'
+            on_press:
+                app.create_pdf('registro.txt')
+            background_color: 0.7, 0.56, 0.4, 1
+            text_color: 0.77,0.77,0.77,1
+            bold: True
+
     AnchorLayout:
         size_hint: .05, .05
         anchor_x: 'left'
-        achor_y: 'bottom'
+        anchor_y: 'bottom'
         Button:
-            text: 'Licenças'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'licenca'
             background_color: 0.7, 0.56, 0.4, 1
             text_color: 0.77,0.77,0.77,1
             bold: True
-
 
 
 #Claviculario
@@ -1669,7 +1681,7 @@ IniciarScreen
         anchor_x: 'left'
         achor_y: 'bottom'
         Button:
-            text: 'Menu'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
@@ -2077,7 +2089,7 @@ IniciarScreen
         anchor_x: 'left'
         achor_y: 'bottom'
         Button:
-            text: 'Menu'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'
@@ -2823,7 +2835,7 @@ IniciarScreen
         anchor_x: 'left'
         achor_y: 'bottom'
         Button:
-            text: 'Menu'
+            text: 'Voltar'
             on_press:
                 root.manager.transition.direction = 'right'
                 root.manager.current = 'menu'

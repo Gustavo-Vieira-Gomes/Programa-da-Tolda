@@ -18,7 +18,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import StringProperty, ObjectProperty, ListProperty
 from funcoes_aspirante import *
 from kivy.core.window import Window
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
@@ -27,6 +27,7 @@ from sqlite3 import connect
 import os
 import pdb
 import time
+from fpdf import FPDF
 
 EXTERN_FILE      = 'registro.txt'
 SHEET_CHEFE_DIA  = 'ChefeDia'
@@ -302,10 +303,6 @@ class ControleGeralApp(App):
             self.refresh_app()
             self.popup_success_operation.open()
 
-
-    def atualizar_coluna_bd(self):
-        pass
-
     def excluir_registros(self):
         pass
 
@@ -339,11 +336,47 @@ class ControleGeralApp(App):
         self.ultima_alteracao_licenca = info_licencas[1]
         print("Botão pressionado: " + self.BOTAO_PRESSIONADO)
 
-    def registro_externo_regs_lics(self, situacao, horario):
-        arq = open(EXTERN_FILE, 'a')
-        arq.write(situacao+' '+str(horario.year)+' '+str(horario.month)+' '+str(horario.day)+' '+str(horario.hour)+' '+str(horario.minute)+'\n')
+    def registro_externo_regs_lics(self, num_int, nome, situacao, day):
+        with open('registro.txt', 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+        dias_da_semana = ['SEGUNDA','TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO']
+        for index, line in enumerate(lines):
+            if line.split(' - ')[0] == dias_da_semana[datetime.weekday(day)]:
+                if line.split(' - ')[1][:-1] == day.strftime('%d/%m/%Y'):
+                    for line_after in lines[index+1:]:
+                        if line_after.split(' - ')[0] == dias_da_semana[datetime.weekday(day-timedelta(1))]:
+                            lines.insert(lines.index(line_after)-1, f'{str(num_int).upper()} {str(nome).upper()} - {str(situacao).upper()} - {datetime.now().strftime('%d/%m/%Y  %H:%M:%S')}\n')
+                else:
+                    # Caso 1: 1º linha
+                    # Caso 2: Meio do Texto
+                    # Caso 3: última linha
 
-        arq.close()
+
+                    lines.insert(0, '\n')
+                    lines.insert(0, f'{str(num_int).upper()} - {str(nome).upper()} - {str(situacao).upper()} - {datetime.now().strftime('%d/%m/%Y  %H:%M:%S')}\n')
+                    lines.insert(0, '\n')
+                    lines.insert(0, f'{dias_da_semana[datetime.weekday(day)]} - {day.strftime("%d/%m/%Y")}\n'.upper())
+        with open('registro.txt', 'w', encoding='utf-8') as file:
+            file.writelines(lines)
+
+    def create_pdf(self, input_file):
+        # Create a new FPDF object
+        pdf = FPDF()
+        # Open the text file and read its contents
+        with open(input_file, 'r', encoding='utf-8') as f:
+            text = f.read()
+
+        # Add a new page to the PDF
+        pdf.add_page()
+
+        # Set the font and font size
+        pdf.set_font('times', size=10)
+
+        # Write the text to the PDF
+        pdf.write(5, text)
+
+        # Save the PDF
+        pdf.output('registros licencas.pdf')
 
     def refresh_app(self):
         self.organiza_controle_geral_licenca()
@@ -377,22 +410,27 @@ class ControleGeralApp(App):
             self.popup_operation_error.open()
 
 
-
     def atualiza_licenca(self, button_text):
         print("Botão pressionado: " + button_text)
         if button_text == "":
+            pass
+        elif (button_text == 'Regresso' and DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual) == 'A Bordo') or (button_text == DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual)):
             pass
         else:
             if DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual) != 'BAIXA':
                 try:
                     if button_text == 'Regresso':
                         DatabaseTolda().update_info('Licenças', 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
-                        self.registro_externo_regs_lics("REG", datetime.now())
-
+                        try:
+                            self.registro_externo_regs_lics(self.numero_atual, DatabaseTolda().pegar_info('Licenças', 'Nome de Guerra', 'Número Interno', self.numero_atual), 'A Bordo', datetime.now())
+                        except Exception as e:
+                            print(e)
                     else:
                         DatabaseTolda().update_info('Licenças', 'Situação', button_text, 'Número Interno', self.numero_atual)
-                        if button_text == "Licença":
-                            self.registro_externo_regs_lics("LIC", datetime.now())
+                        try:    
+                            self.registro_externo_regs_lics(self.numero_atual,DatabaseTolda().pegar_info('Licenças', 'Nome de Guerra', 'Número Interno', self.numero_atual), str(button_text), datetime.now())
+                        except Exception as e:
+                            print(e)    
                     DatabaseTolda().update_info('Licenças', 'Última Alteração', datetime.now().strftime('%d/%m/%Y %H:%M'), 'Número Interno', self.numero_atual)
 
                 except:
@@ -410,44 +448,44 @@ class ControleGeralApp(App):
         self.organiza_quarto_licenca()
 
     def organiza_controle_geral_licenca(self):
-        data = DatabaseTolda()
         try:
-            self.abordo_licenca =  data.contar_info('Licenças', 'Situação', 'A Bordo')
+            self.abordo_licenca =  DatabaseTolda().contar_info('Licenças', 'Situação', 'A Bordo')
         except:
             self.abordo_licenca = '0'
 
         try:
-            self.baixado_licenca = data.contar_info('Licenças', 'Situação', 'Baixado')
+            self.baixado_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'Baixado')
         except:
             self.baixado_licenca = '0'
 
         try:
-            self.crestricao_licenca = data.contar_info('Licenças', 'Situação', 'C/ Restrição')
+            self.crestricao_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'C/ Restrição')
         except:
             self.crestricao_licenca = '0'
 
         try:
-            self.dispdomiciliar_licenca = data.contar_info('Licenças', 'Situação', 'Disp. Domiciliar')
+            self.dispdomiciliar_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'Disp. Domiciliar')
         except:
             self.dispdomiciliar_licenca = '0'
 
         try:
-            self.hnmd_licenca = data.contar_info('Licenças', 'Situação', 'HNMD')
+            self.hnmd_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'HNMD')
         except:
             self.hnmd_licenca = '0'
 
         try:
-            self.lts_licenca = data.contar_info('Licenças', 'Situação', 'LTS')
+            self.lts_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'LTS')
         except:
             self.lts_licenca = '0'
 
         try:
-            self.licenciados_licenca = data.contar_info('Licenças', 'Situação', 'Licença')
-        except:
+            self.licenciados_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'Licença')
+        except Exception as e:
+            print(e)
             self.licenciados_licenca = '0'
 
         try:
-            self.stgt_licenca = data.contar_info('Licenças', 'Situação', 'ST/GT')
+            self.stgt_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'ST/GT')
         except:
             self.stgt_licenca = '0'
 
@@ -1145,11 +1183,24 @@ class ScrollerParteAlta4(RecycleView):
         self.data = data
         self.refresh_from_data()
 
-if __name__ == '__main__':
-    # se o arquivo não existir, cria-o. Dessa maneira, evita-se erros relacionados à abertura futura do EXTERN_FILE
-    arquivo = open(EXTERN_FILE,'a')
-    arquivo.close()
 
+def criar_registro_semanal_txt():
+    def string_dia(dia_atual: datetime, delta: timedelta):
+            data_final = dia_atual - delta
+            return data_final.strftime('%d/%m/%Y')
+        
+    if 'registros.txt' not in os.listdir():
+        with open('registro.txt', 'w', encoding='utf-8') as file:
+            day = datetime.now()
+            #day = date(2024, 3, 24)
+            wk_day = datetime.weekday(day)
+            dias_da_semana = ['Segunda','Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
+            linhas = [f"{dias_da_semana[wk_day- delta]} - {string_dia(day, timedelta(days=(indice)))}\n\n\n".upper() for indice, delta in enumerate(range(0, wk_day+1))]
+            linhas += [f"{dias_da_semana[6 - delta + wk_day]} - {string_dia(day, timedelta(days=wk_day + indice + 1))}\n\n\n".upper() for indice, delta in enumerate(range(wk_day, 6))]
+            file.writelines(linhas)
+
+if __name__ == '__main__':
     if hasattr(sys, '_MEIPASS'):
         resource_add_path(os.path.join(sys._MEIPASS))
+    criar_registro_semanal_txt()
     ControleGeralApp().run()
