@@ -1,0 +1,40 @@
+{
+    "SEXTA": {
+        "data": "12/04/2024",
+        "registros": [
+            "1001 PERDIGÃO - Licença - 12:09",
+            "1002 IGOR PRATES - Licença - 12:09",
+            "1004 LUÍS FELIPE - LTS - 12:09",
+            "1005 POSSIDÉRIO - A Bordo - 12:09",
+            "1002 IGOR PRATES - A Bordo - 12:29",
+            "1003 LIU - A Bordo - 12:29",
+            "1004 LUÍS FELIPE - A Bordo - 12:29",
+            "1005 POSSIDÉRIO - Disp. Domiciliar - 12:29",
+            "1007 LUSTOSA - ST/GT - 12:29"
+        ]
+    },
+    "QUINTA": {
+        "data": "11/04/2024",
+        "registros": []
+    },
+    "QUARTA": {
+        "data": "10/04/2024",
+        "registros": []
+    },
+    "TERÇA": {
+        "data": "09/04/2024",
+        "registros": []
+    },
+    "SEGUNDA": {
+        "data": "08/04/2024",
+        "registros": []
+    },
+    "DOMINGO": {
+        "data": "07/04/2024",
+        "registros": []
+    },
+    "SÁBADO": {
+        "data": "06/04/2024",
+        "registros": []
+    }
+}

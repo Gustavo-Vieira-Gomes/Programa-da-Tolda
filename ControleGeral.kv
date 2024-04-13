@@ -225,7 +225,7 @@ IniciarScreen
                     bold: True
                 Button:
                     text: 'Excluir Registros Anteriores'
-                    on_release: # app.excluir_registros
+                    on_release: app.excluir_registros()
                     background_color: 0.7, 0.56, 0.4, 1
                     text_color: 0.77,0.77,0.77,1
                     size_hint: .6,.1
@@ -1638,7 +1638,9 @@ IniciarScreen
         Button:
             text: 'Download Registro Semanal'
             on_press:
-                app.create_pdf('registro.txt')
+                app.create_pdf()
+            on_release:
+                app.fechar_popups_pdf()
             background_color: 0.7, 0.56, 0.4, 1
             text_color: 0.77,0.77,0.77,1
             bold: True

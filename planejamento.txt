@@ -1,0 +1,57 @@
+* Tela de Login
+    - Criar Layout tela de Login - ok
+    - Criar Criar Tela de Admin - ok
+        - Botão Atualizar BD - ok
+        - Botão Licenciar todo mundo - ok
+        - Botão regressar todo mundo - ok
+        - Botão Zerar Registros de Atualização - ok
+    - Arrumar voltar da tela suporte - ok
+    - Ajustar inicialização para tela de Login - ok
+    - Função de Verificação de dados de  - ok
+    - Ajustar Transição para telas correspondentes ao usuário - ok
+    - Criar Tela com ListView para atualização do BD - ok
+
+# Arrumar Popup Sitrep da atualização do BD - ok
+
+
+* Atualização do Banco de Dados:
+    - Criar interface para inserção dos dados via arquivo xlsx - ok
+    - Passar dados para o BD - ok
+    - Popup contendo o Sitrep da Atualização - ok
+    - Atualizar todos em uma coluna (Setar lic) - ok
+    - Atualizar todos em uma coluna (Setar reg) - ok
+
+* Preparar para o CN - ok
+    * Todas as telas
+        - Mudar o logo para o logo do CN - ok
+    * Tela de Admin
+        - Remover botão de excluir registros - ok
+        - mudar labels dos botões de mudança de situação - ok
+    *Tela Tolda
+        - Remover botão acesso à parte baixa - ok
+            - Excluir tela - ok
+        - Remover tela registro do chefe de dia - ok
+            - Excluir Tela - ok
+    * PBEN
+        - Substituir Camarote por "Equipe" - ok
+        - Substituir Quarto por "Telefone de Emergência" (Nome + Telefone) - ok
+    * Licenças
+        - Substituir Licença por Licença Angra e Licença Rio - ok
+        - Adicionar UISM - ok
+        - Adicionar Visitações - ok
+        - Alterar resumo das licenças (Quantitativo) - ok
+    * Registro de Licenças - ok
+        Retirar um dos scrolls, deixar apenas 3 - ok
+
+
+* corrigir id unico dos textinputs - fds
+
+* Registro de Alterações de Licenciamento - ok
+    - Criar botão para criação do arquivo em pdf - ok
+    - Registrar de forma clara as alterações num arquivo Registro.txt pra cada Parte - ok
+    - Criar função para deletar registros muito antigos - ok
+
+* atulizar 2163 e 2164
+
+
+* Criar arquivo único, sem pasta

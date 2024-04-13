@@ -1,17 +1,4 @@
-"""
-    Projeto: Controle Geral da Tolda
-    Suporte: Asp Hartmann, Asp Lucas Moraes, Asp Nunes Trindade, Asp Wagner Souza
-    Data da última modificação: 30/12/2023
-    Resumo da última modificação: Adicionou o Nome da chave junto a sua pesquisa, retirada ou devolução, além de
-correção de erros na página claviculário.
-
-    Objetivos:
--3 botões pagian Clavi (OK)
-
--Salvamento autoamtico  -Pagina Scrollable "RegistroLicenças"   -Trocar Excel por BD
--Função e arquivo "HistoricoSemanalLicenças"    - **ETCS**
-"""
-import os, sys
+import os, sys, time, json
 from kivy.resources import resource_add_path
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -22,14 +9,13 @@ from datetime import datetime, timedelta, date
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
-from banco_de_dados import DatabaseTolda
+from banco_de_dados import DatabaseTolda, resource_path
 from sqlite3 import connect
-import os
-import pdb
-import time
 from fpdf import FPDF
+from pathlib import Path
 
-EXTERN_FILE      = 'registro.txt'
+
+EXTERN_FILE      = 'registro.json'
 SHEET_CHEFE_DIA  = 'ChefeDia'
 SHEET_LICENCAS   = 'Licenças'
 SHEET_PBEN       = 'PBEN'
@@ -44,10 +30,8 @@ class MenuScreen(Screen):
 class PbenScreen(Screen):
     chave_pesquisa = ObjectProperty(None)
 
-
 class LicencaScreen(Screen):
     chave_pesquisa = ObjectProperty(None)
-
 
 class RegistroLicencasScreen(Screen):
     pass
@@ -55,14 +39,11 @@ class RegistroLicencasScreen(Screen):
 class ChavesScreen(Screen):
     pass
 
-
 class ParteAltaScreen(Screen):
     pass
 
-
 class ChefeDiaScreen(Screen):
     pass
-
 
 class SuporteScreen(Screen):
     pass
@@ -115,6 +96,12 @@ class ControleGeralApp(App):
         self.popup_operation_error = Popup(title ='ERRO!',
                                             content = self.popup_operation_errorlog,
                                             size_hint=(None, None), size=(300, 300))
+        self.popup_success_pdf = Popup(title='SUCESSO!',
+                                       content=Label(text='O PDF foi criado com sucesso\n Verifique na área de trabalho!',color = (0.18, 0.28, 0.40, 1), bold= True),
+                                       size_hint=(None, None), size=(300, 300))
+        self.popup_error_pdf = Popup(title='ERRO!',
+                                    content=Label(text='Não foi possível criar o PDF', color = (0.18, 0.28, 0.40, 1), bold= True),
+                                    size_hint=(None, None), size=(300, 300))
         
 
     """
@@ -296,15 +283,11 @@ class ControleGeralApp(App):
     def atualizar_bd(self, arquivo_excel):
         try:
             DatabaseTolda().criar_database(arquivo_excel[0])
-            print(arquivo_excel[0])
         except:
             self.popup_operation_error.open()
         else:
             self.refresh_app()
             self.popup_success_operation.open()
-
-    def excluir_registros(self):
-        pass
 
     def consulta_pben(self, chave_pesquisa):
         aspirante = busca_aspirante(self.aspirantes, chave_pesquisa)
@@ -334,49 +317,86 @@ class ControleGeralApp(App):
         info_licencas = busca_licenca(self.numero_atual, DatabaseTolda().pegar_table('Licenças'))
         self.situacao_atual_licenca = info_licencas[0]
         self.ultima_alteracao_licenca = info_licencas[1]
-        print("Botão pressionado: " + self.BOTAO_PRESSIONADO)
 
-    def registro_externo_regs_lics(self, num_int, nome, situacao, day):
-        with open('registro.txt', 'r', encoding='utf-8') as file:
-            lines = file.readlines()
-        dias_da_semana = ['SEGUNDA','TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO']
-        for index, line in enumerate(lines):
-            if line.split(' - ')[0] == dias_da_semana[datetime.weekday(day)]:
-                if line.split(' - ')[1][:-1] == day.strftime('%d/%m/%Y'):
-                    for line_after in lines[index+1:]:
-                        if line_after.split(' - ')[0] == dias_da_semana[datetime.weekday(day-timedelta(1))]:
-                            lines.insert(lines.index(line_after)-1, f'{str(num_int).upper()} {str(nome).upper()} - {str(situacao).upper()} - {datetime.now().strftime('%d/%m/%Y  %H:%M:%S')}\n')
-                else:
-                    # Caso 1: 1º linha
-                    # Caso 2: Meio do Texto
-                    # Caso 3: última linha
+    def atualizar_registros(self, num_int, nome, situacao, arquivo_json='registro.json'):
+        # Ler o arquivo JSON existente ou criar um novo se não existir
+        if os.path.exists(arquivo_json):
+            with open(arquivo_json, 'r', encoding='utf-8') as file:
+                dados = json.load(file)
+        else:
+            dados = criar_registro_semanal()
+        # Obtém a data de hoje e itera sobre os últimos 7 dias
+        hoje = datetime.now()
+        dias_semana = {'MONDAY':'SEGUNDA', 'TUESDAY':'TERÇA', 'WEDNESDAY':'QUARTA', 'THURSDAY':'QUINTA', 'FRIDAY':'SEXTA', 'SATURDAY':'SÁBADO', 'SUNDAY':'DOMINGO'}
+        for i in range(7):
+            dia_atual = hoje - timedelta(days=i)
+            nome_dia = dia_atual.strftime("%A").upper()  # Dia da semana em maiúsculo
+            nome_dia = dias_semana[nome_dia]
+            data_formatada = dia_atual.strftime("%d/%m/%Y")
+
+            # Verifica e atualiza os dados conforme a necessidade
+            if dados[nome_dia]["data"] != data_formatada:
+                dados[nome_dia]["data"] = data_formatada
+                dados[nome_dia]["registros"].clear()  # Limpa os registros antigos
+
+            # Se o dia especificado corresponde ao dia da iteração, adiciona o novo registro
+            if dados[nome_dia]['data'] == hoje.strftime('%d/%m/%Y'):
+                instante = hoje.strftime('%H:%M')
+                registro = f'{num_int} {nome} - {situacao} - {instante}'
+                dados[nome_dia]["registros"].append(registro)
+
+        with open(arquivo_json, 'w', encoding='utf-8') as file:
+            json.dump(dados, file, ensure_ascii=False, indent=4)
+
+    def create_pdf(self, input_file='registro.json'):
+        try:
+            # Create a new FPDF object
+            pdf = FPDF()
+            # Open the text file and read its contents
+            with open(resource_path(input_file), 'r', encoding='utf-8') as f:
+                text = json.load(f)
+
+            lista = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO']
+
+            # Add a new page to the PDF
+            pdf.add_page()
+
+            # Write the text to the PDF
+            for i in range(datetime.today().weekday(), -1, -1):
+                pdf.set_font('times', size=12)
+                pdf.write(5, f'\n{lista[i]} - {text[lista[i]]['data']}\n')
+                pdf.set_font('times', size=10)
+                for registro in text[lista[i]]['registros']:
+                    pdf.write(5, registro+'\n')
+            for i in range(6, datetime.today().weekday(), -1):
+                pdf.set_font('times', size=12)
+                pdf.write(5, f'\n{lista[i]} - {text[lista[i]]['data']}\n')
+                pdf.set_font('times', size=10)
+                for registro in text[lista[i]]['registros']:
+                    pdf.write(5, registro+'\n')
+            f
+
+            # Save the PDF
+            pdf.output(Path().cwd().parent / f'Registro Licenças {datetime.now().strftime("%d-%m-%Y-%H%Mp")}.pdf')
+        except Exception as e:
+            self.popup_error_pdf.open()
+            print(e)
+        else:
+            self.popup_success_pdf.open()
+
+    def fechar_popups_pdf(self):
+        time.sleep(1)
+        try: self.popup_error_pdf.dismiss()
+        except: pass
+        try: self.popup_success_pdf.dismiss()
+        except: pass
+    
 
 
-                    lines.insert(0, '\n')
-                    lines.insert(0, f'{str(num_int).upper()} - {str(nome).upper()} - {str(situacao).upper()} - {datetime.now().strftime('%d/%m/%Y  %H:%M:%S')}\n')
-                    lines.insert(0, '\n')
-                    lines.insert(0, f'{dias_da_semana[datetime.weekday(day)]} - {day.strftime("%d/%m/%Y")}\n'.upper())
-        with open('registro.txt', 'w', encoding='utf-8') as file:
-            file.writelines(lines)
 
-    def create_pdf(self, input_file):
-        # Create a new FPDF object
-        pdf = FPDF()
-        # Open the text file and read its contents
-        with open(input_file, 'r', encoding='utf-8') as f:
-            text = f.read()
 
-        # Add a new page to the PDF
-        pdf.add_page()
-
-        # Set the font and font size
-        pdf.set_font('times', size=10)
-
-        # Write the text to the PDF
-        pdf.write(5, text)
-
-        # Save the PDF
-        pdf.output('registros licencas.pdf')
+    def excluir_registros(self, input_file='registro.json'):
+        os.remove(resource_path(input_file))
 
     def refresh_app(self):
         self.organiza_controle_geral_licenca()
@@ -406,12 +426,9 @@ class ControleGeralApp(App):
             self.refresh_app()
             self.popup_success_operation.open()
         except Exception as e:
-            print(e)
             self.popup_operation_error.open()
 
-
     def atualiza_licenca(self, button_text):
-        print("Botão pressionado: " + button_text)
         if button_text == "":
             pass
         elif (button_text == 'Regresso' and DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual) == 'A Bordo') or (button_text == DatabaseTolda().pegar_info('Licenças', 'Situação', 'Número Interno', self.numero_atual)):
@@ -422,15 +439,15 @@ class ControleGeralApp(App):
                     if button_text == 'Regresso':
                         DatabaseTolda().update_info('Licenças', 'Situação', 'A Bordo', 'Número Interno', self.numero_atual)
                         try:
-                            self.registro_externo_regs_lics(self.numero_atual, DatabaseTolda().pegar_info('Licenças', 'Nome de Guerra', 'Número Interno', self.numero_atual), 'A Bordo', datetime.now())
+                            self.atualizar_registros(self.numero_atual, DatabaseTolda().pegar_info('Licenças', 'Nome de Guerra', 'Número Interno', self.numero_atual), 'A Bordo')
                         except Exception as e:
-                            print(e)
+                            pass
                     else:
                         DatabaseTolda().update_info('Licenças', 'Situação', button_text, 'Número Interno', self.numero_atual)
                         try:    
-                            self.registro_externo_regs_lics(self.numero_atual,DatabaseTolda().pegar_info('Licenças', 'Nome de Guerra', 'Número Interno', self.numero_atual), str(button_text), datetime.now())
+                            self.atualizar_registros(self.numero_atual,DatabaseTolda().pegar_info('Licenças', 'Nome de Guerra', 'Número Interno', self.numero_atual), str(button_text))
                         except Exception as e:
-                            print(e)    
+                            pass
                     DatabaseTolda().update_info('Licenças', 'Última Alteração', datetime.now().strftime('%d/%m/%Y %H:%M'), 'Número Interno', self.numero_atual)
 
                 except:
@@ -481,7 +498,6 @@ class ControleGeralApp(App):
         try:
             self.licenciados_licenca = DatabaseTolda().contar_info('Licenças', 'Situação', 'Licença')
         except Exception as e:
-            print(e)
             self.licenciados_licenca = '0'
 
         try:
@@ -718,8 +734,6 @@ class ControleGeralApp(App):
 
     botao_parte_alta = StringProperty('')
 
-
-
     def atualiza_partealta(self, button_text):
         if button_text == '':
             return
@@ -929,20 +943,6 @@ class ControleGeralApp(App):
     def registra_chefe_dia(self):
         agora = datetime.now().strftime('%d/%m/%Y %H:%M')
         DatabaseTolda().insert_row('ChefeDia', DATAHORA=agora, Nx_Ajosca=self.numero_ajosca_cd, Nx_CHEFE_DE_DIA=self.numero_chefe_cd, QUARTO_DE_SERVIÇO=self.quarto_de_serviço_cd, COMPANHIA=self.companhia_cd, PELOTÃO=self.pelotao_cd, QTD_CINTOS=self.cintos_cd, BANDEIRA_ASPz_NASCIMENTO=self.bandeira_cd, QTD_ASP_LICENCIADOS=self.licenciados_cd, QTD_REGRESSOS=self.regressos_cd, SITUAÇÃO_COMPUTADORyALARME=self.computador_cd, SITUAÇÃO_MAPA_MUNDI=self.mapamundi_cd)
-        #self.chefedia.loc[self.chefedia.index.max() + 1] = [agora,
-        #                                                    self.numero_ajosca_cd,
-        #                                                    self.numero_chefe_cd,
-        #                                                    self.quarto_de_serviço_cd,
-        #                                                    self.companhia_cd,
-        #                                                    self.pelotao_cd,
-        #                                                    self.cintos_cd,
-        #                                                    self.bandeira_cd,
-        #                                                    self.licenciados_cd,
-        #                                                    self.regressos_cd,
-        #                                                    self.computador_cd,
-        #                                                    self.mapamundi_cd]
-
-        #self.salvar_alteracoes()
 
     def count_regs_lics(self,quarto_servico, lic, reg):
         """
@@ -1050,7 +1050,6 @@ class ScrollerPage1(RecycleView):
 
     def atualizar(self):
         data = []
-        print('cheguei aqui')
         df_final = DatabaseTolda().pegar_table('Licenças').query('Ano == 1')
         for index, row in df_final.iterrows():
             data.append({'text': f'{row.values[0]} {row.values[1]} - {row.values[2]}', 'background_color': self.dict_colors[row.values[2]]})
@@ -1184,23 +1183,19 @@ class ScrollerParteAlta4(RecycleView):
         self.refresh_from_data()
 
 
-def criar_registro_semanal_txt():
-    def string_dia(dia_atual: datetime, delta: timedelta):
-            data_final = dia_atual - delta
-            return data_final.strftime('%d/%m/%Y')
-        
-    if 'registros.txt' not in os.listdir():
-        with open('registro.txt', 'w', encoding='utf-8') as file:
-            day = datetime.now()
-            #day = date(2024, 3, 24)
-            wk_day = datetime.weekday(day)
-            dias_da_semana = ['Segunda','Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo']
-            linhas = [f"{dias_da_semana[wk_day- delta]} - {string_dia(day, timedelta(days=(indice)))}\n\n\n".upper() for indice, delta in enumerate(range(0, wk_day+1))]
-            linhas += [f"{dias_da_semana[6 - delta + wk_day]} - {string_dia(day, timedelta(days=wk_day + indice + 1))}\n\n\n".upper() for indice, delta in enumerate(range(wk_day, 6))]
-            file.writelines(linhas)
+def criar_registro_semanal():
+    with open('registro.json', 'w+', encoding='utf-8') as file:
+        hoje = datetime.now()
+        dias_semana = {'MONDAY':'SEGUNDA', 'TUESDAY':'TERÇA', 'WEDNESDAY':'QUARTA', 'THURSDAY':'QUINTA', 'FRIDAY':'SEXTA', 'SATURDAY':'SÁBADO', 'SUNDAY':'DOMINGO'}
+        dados = {}
+        for i in range(7):
+            dia_atual = hoje - timedelta(i)
+            nome_dia = dia_atual.strftime('%A').upper()
+            dados.update({dias_semana[nome_dia]: {"data": f"{dia_atual.strftime('%d/%m/%Y')}", "registros": []}})
+        json.dump(dados, file, ensure_ascii=False, indent=4)
+        return dados
 
 if __name__ == '__main__':
     if hasattr(sys, '_MEIPASS'):
         resource_add_path(os.path.join(sys._MEIPASS))
-    criar_registro_semanal_txt()
     ControleGeralApp().run()
